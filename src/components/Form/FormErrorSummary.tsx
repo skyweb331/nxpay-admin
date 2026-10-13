@@ -23,7 +23,7 @@ const humanize = (path: string) =>
     .map((part) => (/^\d+$/.test(part) ? `#${Number(part) + 1}` : capitalize(part.replace(/([a-z])([A-Z])/g, "$1 $2"))))
     .join(" ");
 
-/** GOGO's "The following inputs have errors!" alert, after a failed submit. */
+/** The starter's "The following inputs have errors!" alert, after a failed submit. */
 export function FormErrorSummary({ className }: { className?: string }) {
   const labels = useContext(FormLabelsContext);
   const {

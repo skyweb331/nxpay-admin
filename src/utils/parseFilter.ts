@@ -2,7 +2,7 @@ import type { GridFilterModel } from "@mui/x-data-grid";
 
 type Filter = Record<string, unknown>;
 
-/** MUI X operator -> backend filter operator (see gogo-backend queryArgs.ts). */
+/** MUI X operator -> backend filter operator (see nxpay-backend queryArgs.ts). */
 function toCondition(operator: string, value: unknown): unknown {
   switch (operator) {
     case "contains":

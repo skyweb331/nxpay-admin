@@ -63,7 +63,7 @@ type Snapshot = { chain: string; address: string; type: string; label: string | 
 const SOURCE_LABELS: Record<string, string> = {
   bridge_va: "Bridge virtual account",
   bridge_transfer: "Bridge transfer",
-  system: "GOGO",
+  system: "NxPay",
   admin: "Staff",
 };
 
@@ -163,7 +163,7 @@ export default function TransactionDetailView({ id }: { id: number }) {
                   <MoneyText cents={tx.creditedAmountInCents} currency={tx.currency} token variant="body2" />
                 </Row>
               )}
-              <Row label="GOGO fee">
+              <Row label="NxPay fee">
                 <MoneyText cents={tx.feeInCents} currency={tx.currency} variant="body2" />
               </Row>
               <Row label="Payout">
@@ -276,7 +276,7 @@ export default function TransactionDetailView({ id }: { id: number }) {
                 <>
                   <Row label="Network">{chainLabel(snapshot.chain)}</Row>
                   <Row label="Wallet">
-                    {snapshot.label ?? (snapshot.type === "Generated" ? "GOGO wallet" : "External wallet")}
+                    {snapshot.label ?? (snapshot.type === "Generated" ? "NxPay wallet" : "External wallet")}
                   </Row>
                   <CopyField label="Address" value={snapshot.address} />
                 </>

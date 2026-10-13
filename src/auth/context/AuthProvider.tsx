@@ -57,7 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (me && STAFF_ROLES.has(me.role)) {
         setUser(me);
       } else if (me || failed) {
-        if (me) enqueueSnackbar("This console is for GOGO staff only.", { variant: "error" });
+        if (me) enqueueSnackbar("This console is for NxPay staff only.", { variant: "error" });
         await clear();
       }
       setChecked(true);

@@ -21,7 +21,7 @@ type Props = {
   disabled?: boolean;
 };
 
-/** MUI X DatePicker styled by GOGO's date-time-picker.css; stores a formatted string. */
+/** MUI X DatePicker styled by the starter's date-time-picker.css; stores a formatted string. */
 export function RHFDatePicker({ name, label, valueFormat = "YYYY-MM-DD", format, views, ...other }: Props) {
   const { control } = useFormContext();
   useRegisterLabel(name, label);

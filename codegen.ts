@@ -1,7 +1,7 @@
 import type { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
-  schema: process.env.CODEGEN_SCHEMA ?? "../gogo-backend/schema.graphql",
+  schema: process.env.CODEGEN_SCHEMA ?? "../nxpay-backend/schema.graphql",
   documents: ["src/**/*.{ts,tsx}", "!src/__generated__/**/*"],
   ignoreNoDocuments: true,
   generates: {

@@ -9,10 +9,10 @@ export default function Page() {
 
   return (
     <>
-      <Helmet title={`Transaction GOGO-${id}`} />
+      <Helmet title={`Transaction NXP-${id}`} />
       <PageHeader
-        title={`Transaction GOGO-${id}`}
-        crumbs={[{ label: "Transactions", href: paths.transactions.root }, { label: `GOGO-${id}` }]}
+        title={`Transaction NXP-${id}`}
+        crumbs={[{ label: "Transactions", href: paths.transactions.root }, { label: `NXP-${id}` }]}
       />
       <View key={id} id={Number(id)} />
     </>

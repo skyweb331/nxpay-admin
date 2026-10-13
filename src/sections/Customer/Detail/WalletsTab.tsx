@@ -50,7 +50,7 @@ export function WalletsTab({ wallets }: { wallets: CustomerWalletFragment[] }) {
                   <TableCell>
                     <Box className="flex flex-row items-center gap-2">
                       <Typography variant="body2" className="font-semibold">
-                        {w.label ?? (w.type === "Generated" ? "GOGO wallet" : "External wallet")}
+                        {w.label ?? (w.type === "Generated" ? "NxPay wallet" : "External wallet")}
                       </Typography>
                       {w.isPayout && <Chip size="small" color="primary" label="Payout" />}
                     </Box>

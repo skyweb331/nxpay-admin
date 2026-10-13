@@ -8,7 +8,7 @@ import { paths } from "@/routes/paths";
 
 export type Crumb = { label: string; href?: string };
 
-/** GOGO title block: h1, breadcrumbs (Home first), optional right-aligned actions. */
+/** Starter title block: h1, breadcrumbs (Home first), optional right-aligned actions. */
 export function PageHeader({
   title,
   crumbs = [],

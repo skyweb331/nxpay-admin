@@ -63,7 +63,7 @@ export default function SandboxView() {
         return;
       }
       setResults((prev) => [tx, ...prev].slice(0, 10));
-      enqueueSnackbar(`Deposit GOGO-${tx.id} created`, { variant: "success" });
+      enqueueSnackbar(`Deposit NXP-${tx.id} created`, { variant: "success" });
       methods.resetField("amountInCents");
     } catch (e) {
       if (!applyServerErrors(e, methods.setError, ["customerId", "currency", "amountInCents"])) {
@@ -129,7 +129,7 @@ export default function SandboxView() {
                 results.map((tx) => (
                   <Box key={tx.id} className="flex flex-row items-center justify-between gap-2 py-1.5">
                     <Link to={paths.transactions.view(tx.id)} className="link-primary link-underline-hover font-mono">
-                      GOGO-{tx.id}
+                      NXP-{tx.id}
                     </Link>
                     <Typography variant="body2">{formatMoney(tx.grossAmountInCents, tx.currency)}</Typography>
                     <StatusChip kind="transaction" value={tx.state} />

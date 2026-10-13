@@ -4,7 +4,7 @@ import { Box, Chip, Divider, Paper, Typography } from "@mui/material";
 
 import Logo from "@/components/logo/logo";
 
-/** GOGO's centered auth card (starter sign-in markup). */
+/** Centered auth card (starter sign-in markup). */
 export function AuthCard({
   title,
   description,

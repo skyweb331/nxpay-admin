@@ -10,7 +10,7 @@ export type ThemeVariant = (typeof THEME_OPTIONS)[keyof typeof THEME_OPTIONS];
 export type ModeVariant = (typeof THEME_MODE_OPTIONS)[number];
 export const THEME_MODE_OPTIONS = ["light", "dark", "system"] as const;
 
-const storagePrefix = import.meta.env.VITE_STORAGE_PREFIX || "gogo";
+const storagePrefix = import.meta.env.VITE_STORAGE_PREFIX || "nxpay";
 
 export const LOCAL_STORAGE_KEYS = {
   themeColor: `${storagePrefix}-theme-color`,

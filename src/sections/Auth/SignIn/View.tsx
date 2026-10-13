@@ -58,7 +58,7 @@ function PasswordStep({ onChallenge }: { onChallenge: (challenge: Challenge) => 
   });
 
   return (
-    <AuthCard title="Staff sign in" description="GOGO operations console. Customers sign in at the GOGO app.">
+    <AuthCard title="Staff sign in" description="NxPay operations console. Customers sign in at the NxPay app.">
       <Form methods={methods} onSubmit={onSubmit}>
         <RHFTextField name="email" label="Email" type="email" autoComplete="username" autoFocus />
         <RHFTextField name="password" label="Password" type="password" autoComplete="current-password" />

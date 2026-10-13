@@ -8,7 +8,7 @@ const entity = (root: string) => ({
   match: `${root}/:id`,
 });
 
-/** Keep in sync with the links in gogo-backend email templates (staff invite, password reset). */
+/** Keep in sync with the links in nxpay-backend email templates (staff invite, password reset). */
 export const paths = {
   auth: {
     signIn: `${ROOTS.AUTH}/sign-in`,

@@ -21,7 +21,7 @@ export const emailSchema = zod
   .max(254)
   .pipe(zod.email({ error: "Enter a valid email" }));
 
-/** Same rules as gogo-backend SignUpInput / ResetPasswordInput */
+/** Same rules as nxpay-backend SignUpInput / ResetPasswordInput */
 export const newPasswordSchema = zod
   .string()
   .min(10, "Password must be at least 10 characters")
@@ -32,7 +32,7 @@ export const otpSchema = zod.string().regex(/^\d{6}$/, "Enter the 6-digit code")
 
 export type Chain = "base" | "solana";
 
-/** Mirrors gogo-backend `normalizeAddress`. */
+/** Mirrors nxpay-backend `normalizeAddress`. */
 export function walletAddressError(chain: Chain, address: string): string | null {
   const value = address.trim();
   if (!value) return "Enter a wallet address";

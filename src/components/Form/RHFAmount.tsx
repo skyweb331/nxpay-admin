@@ -12,7 +12,7 @@ type MaskProps = {
   onChange: (event: { target: { name: string; value: string } }) => void;
 };
 
-/** GOGO's `text-field-mask.tsx` pattern with a money mask. */
+/** The starter's `text-field-mask.tsx` pattern with a money mask. */
 const MoneyMask = forwardRef<HTMLInputElement, MaskProps>(function MoneyMask({ onChange, ...other }, ref) {
   return (
     <IMaskInput

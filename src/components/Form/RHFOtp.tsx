@@ -13,7 +13,7 @@ type Props = {
   onComplete?: (value: string) => void;
 };
 
-/** GOGO's set-verification OTP input. */
+/** The starter's set-verification OTP input. */
 export function RHFOtp({ name, label = "Verification Code", length = 6, autoFocus, onComplete }: Props) {
   const { control } = useFormContext();
   useRegisterLabel(name, label);

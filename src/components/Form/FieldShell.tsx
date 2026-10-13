@@ -6,7 +6,7 @@ import { FilledInput, FormControl, FormHelperText, FormLabel, Input, InputLabel,
 
 import { cn } from "@/lib/utils";
 
-/** GOGO's four validation-demo styles; `standard-outlined` is the default everywhere. */
+/** The starter's four validation-demo styles; `standard-outlined` is the default everywhere. */
 export type FieldVariant = "standard-outlined" | "standard" | "outlined" | "filled";
 
 export const FormLabelsContext = createContext<Map<string, string> | null>(null);
@@ -40,7 +40,7 @@ type ShellProps = {
 
 /**
  * `FormControl variant="standard" size="small" className="outlined"` + `FormLabel` +
- * the error tooltip, exactly like GOGO's validation examples.
+ * the error tooltip, exactly like the starter's validation examples.
  */
 export function FieldShell({
   name,

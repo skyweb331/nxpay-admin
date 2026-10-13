@@ -18,7 +18,7 @@ import NiFilterPlus from "@/icons/nexture/ni-filter-plus";
 import NiSearch from "@/icons/nexture/ni-search";
 import { cn } from "@/lib/utils";
 
-/** MUI X DataGrid (MIT) with GOGO's full-page styling and icon slots. */
+/** MUI X DataGrid (MIT) with the starter's full-page styling and icon slots. */
 export function DataTable<R extends GridValidRowModel>({ className, slots, slotProps, ...props }: DataGridProps<R>) {
   const getRowSpacing = useCallback(
     (params: GridRowSpacingParams) => ({ top: params.isFirstVisible ? 0 : 5, bottom: 5 }),

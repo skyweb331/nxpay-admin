@@ -1,15 +1,15 @@
-# gogo-admin
+# nxpay-admin
 
-Staff back office for GOGO: customers, transactions, failed payouts, fee schedules, support,
+Staff back office for NxPay: customers, transactions, failed payouts, fee schedules, support,
 admin users, audit / webhook logs and sandbox tools.
 
-Built from the GOGO Vite + MUI + Tailwind starter, organised like limelite-frontend
+Built from the Vite + MUI + Tailwind starter, organised like limelite-frontend
 (Apollo Client 4, GraphQL codegen, React Hook Form + zod).
 
 ## Requirements
 
 - Node `22.22.3` (`nvm use`)
-- A running `gogo-backend` on `http://localhost:4000/graphql`
+- A running `nxpay-backend` on `http://localhost:4000/graphql`
 
 ## Run without Docker
 
@@ -28,7 +28,7 @@ npm run dev            # http://localhost:3001
 | `npm run build`     | Type-check and build to `dist/`                            |
 | `npm run typecheck` | Type-check only                                            |
 | `npm run lint`      | ESLint                                                     |
-| `npm run codegen`   | Regenerate `src/gql` from `../gogo-backend/schema.graphql` |
+| `npm run codegen`   | Regenerate `src/gql` from `../nxpay-backend/schema.graphql` |
 
 `codegen` reads the schema file the backend writes on startup in development. Set `CODEGEN_SCHEMA`
 to point it elsewhere (for example `http://localhost:4000/graphql`).

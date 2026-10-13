@@ -3,10 +3,10 @@ import packageJson from "../package.json";
 import { ModeVariant, ThemeVariant } from "@/constants";
 import { ContentType, MenuType, TopNavType } from "@/types/types";
 
-const storagePrefix = import.meta.env.VITE_STORAGE_PREFIX || "gogo-admin";
+const storagePrefix = import.meta.env.VITE_STORAGE_PREFIX || "nxpay-admin";
 
 export const CONFIG = {
-  APP_NAME: "GOGO Admin",
+  APP_NAME: "NxPay Admin",
   VERSION: packageJson.version,
   SERVER_URL: import.meta.env.VITE_API_URL || "http://localhost:4000/graphql",
   SENTRY_DSN: import.meta.env.VITE_SENTRY_DSN || "",
@@ -14,7 +14,7 @@ export const CONFIG = {
   SANDBOX: (import.meta.env.VITE_BRIDGE_ENV || "sandbox") === "sandbox",
   storageTokenKey: `${storagePrefix}-token`,
   redirectPath: "/dashboard",
-  supportEmail: "support@gogo.money",
+  supportEmail: "support@nxpay.money",
 };
 
 export const DEFAULTS = {

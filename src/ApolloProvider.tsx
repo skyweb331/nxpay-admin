@@ -8,7 +8,7 @@ import { SetContextLink } from "@apollo/client/link/context";
 import { ErrorLink } from "@apollo/client/link/error";
 import { ApolloProvider } from "@apollo/client/react";
 
-export const SESSION_EXPIRED_EVENT = "gogo:session-expired";
+export const SESSION_EXPIRED_EVENT = "nxpay:session-expired";
 
 const httpLink = new HttpLink({ uri: CONFIG.SERVER_URL });
 

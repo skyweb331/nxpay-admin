@@ -103,7 +103,7 @@ export function AccountsTab({ accounts }: { accounts: VirtualAccount[] }) {
       <ConfirmDialog
         open={!!target}
         title={`Deactivate the ${target?.sourceCurrency.toUpperCase()} account?`}
-        description="Bridge stops accepting deposits to these bank details. Money sent afterwards is returned to the sender. This cannot be undone from GOGO."
+        description="Bridge stops accepting deposits to these bank details. Money sent afterwards is returned to the sender. This cannot be undone from NxPay."
         confirmLabel="Deactivate"
         color="error"
         loading={loading}

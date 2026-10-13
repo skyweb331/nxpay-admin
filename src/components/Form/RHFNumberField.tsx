@@ -16,7 +16,7 @@ type Props = {
   className?: string;
 };
 
-/** GOGO's base-ui NumberField; stores a number (null when empty). */
+/** The starter's base-ui NumberField; stores a number (null when empty). */
 export function RHFNumberField({ name, label, min, max, step = 1, decimals = 0, disabled, className }: Props) {
   const { control } = useFormContext();
   useRegisterLabel(name, label);

@@ -3,7 +3,7 @@ import { Box, Button, Tooltip } from "@mui/material";
 import NiCrossSquare from "@/icons/nexture/ni-cross-square";
 import { cn } from "@/lib/utils";
 
-/** GOGO's `InputErrorTooltip`. */
+/** The starter's `InputErrorTooltip`. */
 export function FieldErrorTooltip({ title, inline = false }: { title: string; inline?: boolean }) {
   return (
     <Box className={cn("relative z-10", !inline && "w-full")}>
