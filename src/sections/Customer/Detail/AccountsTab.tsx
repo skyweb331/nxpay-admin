@@ -54,7 +54,7 @@ export function AccountsTab({ accounts }: { accounts: VirtualAccount[] }) {
       <Grid container spacing={2.5}>
         {accounts.map((va) => {
           const di = va.depositInstructions;
-          const active = va.status === "activated" || va.status === "active";
+          const active = va.status === "activated";
           return (
             <Grid key={va.id} size={{ xs: 12, md: 6 }}>
               <Card className="h-full">

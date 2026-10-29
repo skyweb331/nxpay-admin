@@ -1,5 +1,4 @@
 import { railLabel } from "../columns";
-
 import { useSnackbar } from "notistack";
 import { ReactNode, useState } from "react";
 import { Link } from "react-router";
@@ -24,6 +23,7 @@ import {
   Typography,
 } from "@mui/material";
 
+import type { Chain } from "@/__generated__/graphql";
 import { useAuthContext } from "@/auth";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import { CopyField } from "@/components/CopyButton";
@@ -58,7 +58,7 @@ type Breakdown = {
   }[];
 };
 
-type Snapshot = { chain: string; address: string; type: string; label: string | null };
+type Snapshot = { chain: Chain; address: string; type: string; label: string | null };
 
 const SOURCE_LABELS: Record<string, string> = {
   bridge_va: "Bridge virtual account",

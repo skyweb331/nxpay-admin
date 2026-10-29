@@ -2,6 +2,8 @@ import bs58 from "bs58";
 import { getAddress, isAddress } from "viem";
 import { z as zod } from "zod";
 
+import type { Chain } from "@/__generated__/graphql";
+
 /** limelite helper: runs a schema inside superRefine so object-level refines always run. */
 export function zodAlwaysRefine<T extends zod.ZodTypeAny>(zodType: T) {
   return zod.any().superRefine(async (value, ctx) => {
@@ -30,7 +32,7 @@ export const newPasswordSchema = zod
 
 export const otpSchema = zod.string().regex(/^\d{6}$/, "Enter the 6-digit code");
 
-export type Chain = "base" | "solana";
+export type { Chain };
 
 /** Mirrors nxpay-backend `normalizeAddress`. */
 export function walletAddressError(chain: Chain, address: string): string | null {

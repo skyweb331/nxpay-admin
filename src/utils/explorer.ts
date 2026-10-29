@@ -1,8 +1,9 @@
+import type { Chain } from "@/__generated__/graphql";
 import { CONFIG } from "@/config";
 
-export const chainLabel = (chain?: string | null) => (chain === "solana" ? "Solana" : chain === "base" ? "Base" : "—");
+export const chainLabel = (chain?: Chain | null) => (chain === "solana" ? "Solana" : chain === "base" ? "Base" : "—");
 
-export function explorerAddressUrl(chain: string, address: string) {
+export function explorerAddressUrl(chain: Chain, address: string) {
   if (chain === "solana") {
     return `https://solscan.io/account/${address}${CONFIG.SANDBOX ? "?cluster=devnet" : ""}`;
   }

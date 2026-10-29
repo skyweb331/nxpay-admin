@@ -66,6 +66,18 @@ export type FiatCurrency =
   | 'eur'
   | 'usd';
 
+export type KycStatus =
+  | 'approved'
+  | 'awaiting_questionnaire'
+  | 'awaiting_ubo'
+  | 'deposits_restricted'
+  | 'incomplete'
+  | 'not_started'
+  | 'offboarded'
+  | 'paused'
+  | 'rejected'
+  | 'under_review';
+
 export type LoginInput = {
   email: string;
   isAdmin?: boolean | null | undefined;
@@ -120,6 +132,10 @@ export type TicketStatus =
   | 'Pending'
   | 'Resolved';
 
+export type TosStatus =
+  | 'approved'
+  | 'pending';
+
 export type TotpInput = {
   code: string;
   mfaToken: string;
@@ -171,6 +187,10 @@ export type UserRole =
   | 'Admin'
   | 'Customer'
   | 'Support';
+
+export type VirtualAccountStatus =
+  | 'activated'
+  | 'deactivated';
 
 export type WalletKeyStatus =
   | 'Exported'
@@ -224,9 +244,9 @@ export type SimulateDepositMutation = { simulateDeposit: { id: string, reference
 export type AppInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AppInfoQuery = { appInfo: { sandbox: boolean, bridgeEnv: string, defaultPayoutChain: string } };
+export type AppInfoQuery = { appInfo: { sandbox: boolean, bridgeEnv: string, defaultPayoutChain: Chain } };
 
-export type CustomerRowFragment = { id: string, status: CustomerStatus, type: CustomerType | null, country: string | null, region: string | null, kycStatus: string, tosStatus: string, onboardingStep: OnboardingStep, onboardedAt: string | null, suspendedAt: string | null, createdAt: string | null, user: { id: string, name: string, email: string, isEmailVerified: boolean, totpEnabled: boolean, lastLoginAt: string | null } | null };
+export type CustomerRowFragment = { id: string, status: CustomerStatus, type: CustomerType | null, country: string | null, region: string | null, kycStatus: KycStatus, tosStatus: TosStatus, onboardingStep: OnboardingStep, onboardedAt: string | null, suspendedAt: string | null, createdAt: string | null, user: { id: string, name: string, email: string, isEmailVerified: boolean, totpEnabled: boolean, lastLoginAt: string | null } | null };
 
 export type CustomersQueryVariables = Exact<{
   page?: string | null | undefined;
@@ -236,7 +256,7 @@ export type CustomersQueryVariables = Exact<{
 }>;
 
 
-export type CustomersQuery = { customers: { total: number | null, customers: Array<{ id: string, status: CustomerStatus, type: CustomerType | null, country: string | null, region: string | null, kycStatus: string, tosStatus: string, onboardingStep: OnboardingStep, onboardedAt: string | null, suspendedAt: string | null, createdAt: string | null, user: { id: string, name: string, email: string, isEmailVerified: boolean, totpEnabled: boolean, lastLoginAt: string | null } | null }> | null } };
+export type CustomersQuery = { customers: { total: number | null, customers: Array<{ id: string, status: CustomerStatus, type: CustomerType | null, country: string | null, region: string | null, kycStatus: KycStatus, tosStatus: TosStatus, onboardingStep: OnboardingStep, onboardedAt: string | null, suspendedAt: string | null, createdAt: string | null, user: { id: string, name: string, email: string, isEmailVerified: boolean, totpEnabled: boolean, lastLoginAt: string | null } | null }> | null } };
 
 export type CustomerWalletFragment = { id: string, chain: Chain, address: string, type: WalletType, label: string | null, status: WalletStatus, isPayout: boolean, keyStatus: WalletKeyStatus, keyExportedAt: string | null, keyRemovedAt: string | null, createdAt: string | null };
 
@@ -245,7 +265,7 @@ export type CustomerDetailQueryVariables = Exact<{
 }>;
 
 
-export type CustomerDetailQuery = { customer: { bridgeCustomerId: string | null, kycLink: string | null, endorsements: unknown, rejectionReasons: unknown, payoutWalletId: string | null, id: string, status: CustomerStatus, type: CustomerType | null, country: string | null, region: string | null, kycStatus: string, tosStatus: string, onboardingStep: OnboardingStep, onboardedAt: string | null, suspendedAt: string | null, createdAt: string | null, wallets: Array<{ id: string, chain: Chain, address: string, type: WalletType, label: string | null, status: WalletStatus, isPayout: boolean, keyStatus: WalletKeyStatus, keyExportedAt: string | null, keyRemovedAt: string | null, createdAt: string | null }>, virtualAccounts: Array<{ id: string, bridgeVirtualAccountId: string | null, sourceCurrency: FiatCurrency, destinationCurrency: string, destinationChain: Chain, status: string, deactivatedAt: string | null, createdAt: string | null, depositInstructions: { paymentRails: Array<string>, accountNumber: string | null, routingNumber: string | null, iban: string | null, bic: string | null, bankName: string | null } }>, user: { id: string, name: string, email: string, isEmailVerified: boolean, totpEnabled: boolean, lastLoginAt: string | null } | null } | null };
+export type CustomerDetailQuery = { customer: { bridgeCustomerId: string | null, kycLink: string | null, endorsements: unknown, rejectionReasons: unknown, payoutWalletId: string | null, id: string, status: CustomerStatus, type: CustomerType | null, country: string | null, region: string | null, kycStatus: KycStatus, tosStatus: TosStatus, onboardingStep: OnboardingStep, onboardedAt: string | null, suspendedAt: string | null, createdAt: string | null, wallets: Array<{ id: string, chain: Chain, address: string, type: WalletType, label: string | null, status: WalletStatus, isPayout: boolean, keyStatus: WalletKeyStatus, keyExportedAt: string | null, keyRemovedAt: string | null, createdAt: string | null }>, virtualAccounts: Array<{ id: string, bridgeVirtualAccountId: string | null, sourceCurrency: FiatCurrency, destinationCurrency: string, destinationChain: Chain, status: VirtualAccountStatus, deactivatedAt: string | null, createdAt: string | null, depositInstructions: { paymentRails: Array<string>, accountNumber: string | null, routingNumber: string | null, iban: string | null, bic: string | null, bankName: string | null } }>, user: { id: string, name: string, email: string, isEmailVerified: boolean, totpEnabled: boolean, lastLoginAt: string | null } | null } | null };
 
 export type CustomerVolumesQueryVariables = Exact<{
   filter?: Record<string, unknown> | null | undefined;
@@ -261,28 +281,28 @@ export type SuspendCustomerMutationVariables = Exact<{
 }>;
 
 
-export type SuspendCustomerMutation = { suspendCustomer: { id: string, status: CustomerStatus, type: CustomerType | null, country: string | null, region: string | null, kycStatus: string, tosStatus: string, onboardingStep: OnboardingStep, onboardedAt: string | null, suspendedAt: string | null, createdAt: string | null, user: { id: string, name: string, email: string, isEmailVerified: boolean, totpEnabled: boolean, lastLoginAt: string | null } | null } };
+export type SuspendCustomerMutation = { suspendCustomer: { id: string, status: CustomerStatus, type: CustomerType | null, country: string | null, region: string | null, kycStatus: KycStatus, tosStatus: TosStatus, onboardingStep: OnboardingStep, onboardedAt: string | null, suspendedAt: string | null, createdAt: string | null, user: { id: string, name: string, email: string, isEmailVerified: boolean, totpEnabled: boolean, lastLoginAt: string | null } | null } };
 
 export type ReactivateCustomerMutationVariables = Exact<{
   id: string | number;
 }>;
 
 
-export type ReactivateCustomerMutation = { reactivateCustomer: { id: string, status: CustomerStatus, type: CustomerType | null, country: string | null, region: string | null, kycStatus: string, tosStatus: string, onboardingStep: OnboardingStep, onboardedAt: string | null, suspendedAt: string | null, createdAt: string | null, user: { id: string, name: string, email: string, isEmailVerified: boolean, totpEnabled: boolean, lastLoginAt: string | null } | null } };
+export type ReactivateCustomerMutation = { reactivateCustomer: { id: string, status: CustomerStatus, type: CustomerType | null, country: string | null, region: string | null, kycStatus: KycStatus, tosStatus: TosStatus, onboardingStep: OnboardingStep, onboardedAt: string | null, suspendedAt: string | null, createdAt: string | null, user: { id: string, name: string, email: string, isEmailVerified: boolean, totpEnabled: boolean, lastLoginAt: string | null } | null } };
 
 export type RegenerateCustomerKycLinkMutationVariables = Exact<{
   id: string | number;
 }>;
 
 
-export type RegenerateCustomerKycLinkMutation = { regenerateCustomerKycLink: { id: string, kycLink: string | null, kycStatus: string, tosStatus: string, onboardingStep: OnboardingStep } };
+export type RegenerateCustomerKycLinkMutation = { regenerateCustomerKycLink: { id: string, kycLink: string | null, kycStatus: KycStatus, tosStatus: TosStatus, onboardingStep: OnboardingStep } };
 
 export type DeactivateVirtualAccountMutationVariables = Exact<{
   id: string | number;
 }>;
 
 
-export type DeactivateVirtualAccountMutation = { deactivateVirtualAccount: { id: string, status: string, deactivatedAt: string | null } };
+export type DeactivateVirtualAccountMutation = { deactivateVirtualAccount: { id: string, status: VirtualAccountStatus, deactivatedAt: string | null } };
 
 export type ResetCustomerTwoFactorMutationVariables = Exact<{
   customerId: string | number;
