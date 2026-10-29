@@ -34,7 +34,7 @@ export const transactionColumns: GridColDef<TransactionRowFragment>[] = [
     align: "left",
     headerAlign: "left",
     renderCell: ({ row }) => (
-      <Link to={paths.transactions.view(row.id)} className="link-primary link-underline-hover font-mono">
+      <Link to={paths.transactions.view(row.reference)} className="link-primary link-underline-hover font-mono">
         {row.reference}
       </Link>
     ),

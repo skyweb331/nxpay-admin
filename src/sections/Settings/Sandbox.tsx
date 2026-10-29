@@ -128,7 +128,10 @@ export default function SandboxView() {
               ) : (
                 results.map((tx) => (
                   <Box key={tx.id} className="flex flex-row items-center justify-between gap-2 py-1.5">
-                    <Link to={paths.transactions.view(tx.id)} className="link-primary link-underline-hover font-mono">
+                    <Link
+                      to={paths.transactions.view(tx.reference)}
+                      className="link-primary link-underline-hover font-mono"
+                    >
                       {tx.reference}
                     </Link>
                     <Typography variant="body2">{formatMoney(tx.grossAmountInCents, tx.currency)}</Typography>
