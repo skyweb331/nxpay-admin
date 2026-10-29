@@ -157,7 +157,7 @@ export default function CustomerDetailView({ id }: { id: string }) {
         </Box>
 
         {tab === "profile" && <ProfileTab customer={customer} />}
-        {tab === "accounts" && <AccountsTab accounts={customer.virtualAccounts} />}
+        {tab === "accounts" && <AccountsTab customer={customer} />}
         {tab === "wallets" && <WalletsTab wallets={customer.wallets} />}
         {tab === "volumes" && <VolumesTab customerId={customer.id} />}
         {tab === "transactions" && (

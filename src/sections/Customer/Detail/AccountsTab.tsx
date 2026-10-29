@@ -1,40 +1,89 @@
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 
-import { Box, Button, Card, CardContent, Grid, Typography } from "@mui/material";
+import { Alert, Box, Button, Card, CardContent, Grid, Typography } from "@mui/material";
 
-import type { CustomerDetailQuery } from "@/__generated__/graphql";
+import type { CustomerDetailQuery, FiatCurrency } from "@/__generated__/graphql";
 import { useAuthContext } from "@/auth";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import { CopyField } from "@/components/CopyButton";
 import EmptyState from "@/components/EmptyState";
 import StatusChip from "@/components/StatusChip";
 import NiBuilding from "@/icons/nexture/ni-building";
-import { DEACTIVATE_VIRTUAL_ACCOUNT } from "@/libs/Customer/useApollo";
+import { CUSTOMER_DETAIL, DEACTIVATE_VIRTUAL_ACCOUNT, OPEN_MISSING_DEPOSIT_ACCOUNTS } from "@/libs/Customer/useApollo";
 import { chainLabel } from "@/utils/explorer";
 import { fDate } from "@/utils/format-time";
 import { errorMessage } from "@/utils/graphql";
 import { useMutation } from "@apollo/client/react";
 
-type VirtualAccount = NonNullable<CustomerDetailQuery["customer"]>["virtualAccounts"][number];
+type Customer = NonNullable<CustomerDetailQuery["customer"]>;
+type VirtualAccount = Customer["virtualAccounts"][number];
 
-export function AccountsTab({ accounts }: { accounts: VirtualAccount[] }) {
+const CURRENCIES: FiatCurrency[] = ["usd", "eur"];
+
+function MissingAccounts({ customer }: { customer: Customer }) {
+  const { enqueueSnackbar } = useSnackbar();
+  const [open, { loading }] = useMutation(OPEN_MISSING_DEPOSIT_ACCOUNTS, {
+    refetchQueries: [{ query: CUSTOMER_DETAIL, variables: { id: customer.id } }],
+    awaitRefetchQueries: true,
+  });
+  const opened = new Set(customer.virtualAccounts.map((va) => va.sourceCurrency));
+  const missing = CURRENCIES.filter((c) => !opened.has(c));
+  if (customer.status !== "Active" || missing.length === 0) return null;
+
+  const onOpen = async () => {
+    try {
+      const { data } = await open({ variables: { id: customer.id } });
+      const results = data?.openMissingDepositAccounts ?? [];
+      if (results.length === 0) enqueueSnackbar("No missing accounts", { variant: "info" });
+      for (const r of results) {
+        const label = r.currency.toUpperCase();
+        if (r.opened) enqueueSnackbar(`${label} account opened`, { variant: "success" });
+        else enqueueSnackbar(`${label} account not opened: ${r.error ?? "unknown error"}`, { variant: "error" });
+      }
+    } catch (e) {
+      enqueueSnackbar(errorMessage(e), { variant: "error" });
+    }
+  };
+
+  return (
+    <Alert
+      severity="warning"
+      className="mb-2.5"
+      action={
+        <Button color="inherit" size="small" loading={loading} onClick={onOpen}>
+          Open missing accounts
+        </Button>
+      }
+    >
+      No {missing.map((c) => c.toUpperCase()).join(" or ")} account yet. It opens automatically once Bridge approves the
+      endorsement (base for USD, sepa for EUR); use the button to retry now and see Bridge&apos;s answer.
+    </Alert>
+  );
+}
+
+export function AccountsTab({ customer }: { customer: Customer }) {
+  const accounts = customer.virtualAccounts;
   const { isAdmin } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
   const [target, setTarget] = useState<VirtualAccount | null>(null);
   const [deactivate, { loading }] = useMutation(DEACTIVATE_VIRTUAL_ACCOUNT);
+  const missing = isAdmin && <MissingAccounts customer={customer} />;
 
   if (accounts.length === 0) {
     return (
-      <Card>
-        <CardContent>
-          <EmptyState
-            icon={<NiBuilding size={40} />}
-            title="No virtual accounts"
-            description="Accounts are created once Bridge approves KYC."
-          />
-        </CardContent>
-      </Card>
+      <>
+        {missing}
+        <Card>
+          <CardContent>
+            <EmptyState
+              icon={<NiBuilding size={40} />}
+              title="No virtual accounts"
+              description="Accounts are created once Bridge approves KYC."
+            />
+          </CardContent>
+        </Card>
+      </>
     );
   }
 
@@ -51,6 +100,7 @@ export function AccountsTab({ accounts }: { accounts: VirtualAccount[] }) {
 
   return (
     <>
+      {missing}
       <Grid container spacing={2.5}>
         {accounts.map((va) => {
           const di = va.depositInstructions;

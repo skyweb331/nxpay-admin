@@ -146,3 +146,13 @@ export const RESET_CUSTOMER_TWO_FACTOR = gql(`
     }
   }
 `);
+
+export const OPEN_MISSING_DEPOSIT_ACCOUNTS = gql(`
+  mutation OpenMissingDepositAccounts($id: ID!) {
+    openMissingDepositAccounts(id: $id) {
+      currency
+      opened
+      error
+    }
+  }
+`);

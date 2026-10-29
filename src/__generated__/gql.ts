@@ -30,6 +30,7 @@ type Documents = {
     "\n  mutation RegenerateCustomerKycLink($id: ID!) {\n    regenerateCustomerKycLink(id: $id) {\n      id\n      kycLink\n      kycStatus\n      tosStatus\n      onboardingStep\n    }\n  }\n": typeof types.RegenerateCustomerKycLinkDocument,
     "\n  mutation DeactivateVirtualAccount($id: ID!) {\n    deactivateVirtualAccount(id: $id) {\n      id\n      status\n      deactivatedAt\n    }\n  }\n": typeof types.DeactivateVirtualAccountDocument,
     "\n  mutation ResetCustomerTwoFactor($customerId: ID!) {\n    resetCustomerTwoFactor(customerId: $customerId) {\n      id\n      totpEnabled\n    }\n  }\n": typeof types.ResetCustomerTwoFactorDocument,
+    "\n  mutation OpenMissingDepositAccounts($id: ID!) {\n    openMissingDepositAccounts(id: $id) {\n      currency\n      opened\n      error\n    }\n  }\n": typeof types.OpenMissingDepositAccountsDocument,
     "\n  fragment FeeScheduleFields on FeeSchedule {\n    id\n    status\n    effectivePeriod\n    notes\n    notifyCustomers\n    publishedAt\n    cancelledAt\n    createdAt\n    createdBy {\n      id\n      name\n    }\n    publishedBy {\n      id\n      name\n    }\n    tiers {\n      id\n      position\n      fromInCents\n      toInCents\n      rateBps\n    }\n  }\n": typeof types.FeeScheduleFieldsFragmentDoc,
     "\n  query FeeOverview {\n    currentFeeSchedule {\n      ...FeeScheduleFields\n    }\n    upcomingFeeSchedule {\n      ...FeeScheduleFields\n    }\n    feeSettings {\n      earliestEffectivePeriod\n      minimumPayoutInCents\n      softCapBps\n    }\n  }\n": typeof types.FeeOverviewDocument,
     "\n  query FeeSchedules($page: String, $sort: String, $filter: JSONObject) {\n    feeSchedules(page: $page, sort: $sort, filter: $filter) {\n      total\n      feeSchedules {\n        ...FeeScheduleFields\n      }\n    }\n  }\n": typeof types.FeeSchedulesDocument,
@@ -82,6 +83,7 @@ const documents: Documents = {
     "\n  mutation RegenerateCustomerKycLink($id: ID!) {\n    regenerateCustomerKycLink(id: $id) {\n      id\n      kycLink\n      kycStatus\n      tosStatus\n      onboardingStep\n    }\n  }\n": types.RegenerateCustomerKycLinkDocument,
     "\n  mutation DeactivateVirtualAccount($id: ID!) {\n    deactivateVirtualAccount(id: $id) {\n      id\n      status\n      deactivatedAt\n    }\n  }\n": types.DeactivateVirtualAccountDocument,
     "\n  mutation ResetCustomerTwoFactor($customerId: ID!) {\n    resetCustomerTwoFactor(customerId: $customerId) {\n      id\n      totpEnabled\n    }\n  }\n": types.ResetCustomerTwoFactorDocument,
+    "\n  mutation OpenMissingDepositAccounts($id: ID!) {\n    openMissingDepositAccounts(id: $id) {\n      currency\n      opened\n      error\n    }\n  }\n": types.OpenMissingDepositAccountsDocument,
     "\n  fragment FeeScheduleFields on FeeSchedule {\n    id\n    status\n    effectivePeriod\n    notes\n    notifyCustomers\n    publishedAt\n    cancelledAt\n    createdAt\n    createdBy {\n      id\n      name\n    }\n    publishedBy {\n      id\n      name\n    }\n    tiers {\n      id\n      position\n      fromInCents\n      toInCents\n      rateBps\n    }\n  }\n": types.FeeScheduleFieldsFragmentDoc,
     "\n  query FeeOverview {\n    currentFeeSchedule {\n      ...FeeScheduleFields\n    }\n    upcomingFeeSchedule {\n      ...FeeScheduleFields\n    }\n    feeSettings {\n      earliestEffectivePeriod\n      minimumPayoutInCents\n      softCapBps\n    }\n  }\n": types.FeeOverviewDocument,
     "\n  query FeeSchedules($page: String, $sort: String, $filter: JSONObject) {\n    feeSchedules(page: $page, sort: $sort, filter: $filter) {\n      total\n      feeSchedules {\n        ...FeeScheduleFields\n      }\n    }\n  }\n": types.FeeSchedulesDocument,
@@ -196,6 +198,10 @@ export function gql(source: "\n  mutation DeactivateVirtualAccount($id: ID!) {\n
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation ResetCustomerTwoFactor($customerId: ID!) {\n    resetCustomerTwoFactor(customerId: $customerId) {\n      id\n      totpEnabled\n    }\n  }\n"): (typeof documents)["\n  mutation ResetCustomerTwoFactor($customerId: ID!) {\n    resetCustomerTwoFactor(customerId: $customerId) {\n      id\n      totpEnabled\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation OpenMissingDepositAccounts($id: ID!) {\n    openMissingDepositAccounts(id: $id) {\n      currency\n      opened\n      error\n    }\n  }\n"): (typeof documents)["\n  mutation OpenMissingDepositAccounts($id: ID!) {\n    openMissingDepositAccounts(id: $id) {\n      currency\n      opened\n      error\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
