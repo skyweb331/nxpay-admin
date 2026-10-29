@@ -3,7 +3,6 @@ import { AccountsTab } from "./AccountsTab";
 import { ProfileTab } from "./ProfileTab";
 import { VolumesTab } from "./VolumesTab";
 import { WalletsTab } from "./WalletsTab";
-
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -92,7 +91,7 @@ export default function CustomerDetailView({ id }: { id: string }) {
   const requested = searchParams.get("tab");
   const tab: TabValue = tabs.find((t) => t.value === requested)?.value ?? "profile";
   const customer = data?.customer;
-  const name = customer?.user?.name ?? `Customer ${id}`;
+  const name = customer?.user?.name ?? "Customer";
 
   const onReactivate = async () => {
     try {
