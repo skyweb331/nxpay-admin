@@ -18,6 +18,7 @@ export const CUSTOMER_ROW = gql(`
       name
       email
       isEmailVerified
+      totpEnabled
       lastLoginAt
     }
   }
@@ -133,6 +134,15 @@ export const DEACTIVATE_VIRTUAL_ACCOUNT = gql(`
       id
       status
       deactivatedAt
+    }
+  }
+`);
+
+export const RESET_CUSTOMER_TWO_FACTOR = gql(`
+  mutation ResetCustomerTwoFactor($customerId: ID!) {
+    resetCustomerTwoFactor(customerId: $customerId) {
+      id
+      totpEnabled
     }
   }
 `);

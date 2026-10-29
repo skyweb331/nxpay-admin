@@ -1,15 +1,17 @@
 import { ONBOARDING_STEP_LABELS } from "../columns";
 
 import { useSnackbar } from "notistack";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 
 import { Box, Button, Card, CardContent, Chip, Grid, Typography } from "@mui/material";
 
 import type { CustomerDetailQuery } from "@/__generated__/graphql";
+import { useAuthContext } from "@/auth";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { CopyField } from "@/components/CopyButton";
 import JsonView from "@/components/JsonView";
 import StatusChip from "@/components/StatusChip";
-import { REGENERATE_CUSTOMER_KYC_LINK } from "@/libs/Customer/useApollo";
+import { REGENERATE_CUSTOMER_KYC_LINK, RESET_CUSTOMER_TWO_FACTOR } from "@/libs/Customer/useApollo";
 import { fDateTime } from "@/utils/format-time";
 import { errorMessage } from "@/utils/graphql";
 import { useMutation } from "@apollo/client/react";
@@ -91,6 +93,47 @@ function KycLink({ customer }: { customer: Customer }) {
   );
 }
 
+function TwoFactorRow({ customer }: { customer: Customer }) {
+  const { isAdmin } = useAuthContext();
+  const { enqueueSnackbar } = useSnackbar();
+  const [open, setOpen] = useState(false);
+  const [reset, { loading }] = useMutation(RESET_CUSTOMER_TWO_FACTOR);
+  const enabled = !!customer.user?.totpEnabled;
+
+  const onConfirm = async () => {
+    try {
+      await reset({ variables: { customerId: customer.id } });
+      enqueueSnackbar("Two-factor sign-in turned off. The customer was emailed.", { variant: "success" });
+      setOpen(false);
+    } catch (e) {
+      enqueueSnackbar(errorMessage(e), { variant: "error" });
+    }
+  };
+
+  return (
+    <>
+      <Row label="Two-factor sign-in">
+        <Chip size="small" color={enabled ? "success" : "default"} label={enabled ? "On" : "Off"} />
+        {isAdmin && enabled && (
+          <Button size="small" variant="text" color="error" className="ms-2" onClick={() => setOpen(true)}>
+            Reset
+          </Button>
+        )}
+      </Row>
+      <ConfirmDialog
+        open={open}
+        title="Turn off this customer's two-factor sign-in?"
+        description="Only do this after confirming the customer's identity, for example when they lost their phone and their backup codes. They sign in with their password alone and can turn it on again from their profile."
+        confirmLabel="Turn off"
+        color="error"
+        loading={loading}
+        onConfirm={onConfirm}
+        onClose={() => setOpen(false)}
+      />
+    </>
+  );
+}
+
 export function ProfileTab({ customer }: { customer: Customer }) {
   const reasons = Array.isArray(customer.rejectionReasons) ? customer.rejectionReasons : [];
 
@@ -120,6 +163,7 @@ export function ProfileTab({ customer }: { customer: Customer }) {
             <Row label="Onboarded">{fDateTime(customer.onboardedAt)}</Row>
             {customer.suspendedAt && <Row label="Suspended">{fDateTime(customer.suspendedAt)}</Row>}
             <Row label="Last sign-in">{fDateTime(customer.user?.lastLoginAt)}</Row>
+            <TwoFactorRow customer={customer} />
           </CardContent>
         </Card>
       </Grid>
