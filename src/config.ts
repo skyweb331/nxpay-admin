@@ -14,7 +14,7 @@ export const CONFIG = {
   SANDBOX: (import.meta.env.VITE_BRIDGE_ENV || "sandbox") === "sandbox",
   storageTokenKey: `${storagePrefix}-token`,
   redirectPath: "/dashboard",
-  supportEmail: "support@nxpay.money",
+  supportEmail: "support@nxpay.org",
 };
 
 export const DEFAULTS = {
