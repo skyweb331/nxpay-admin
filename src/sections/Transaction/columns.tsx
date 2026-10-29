@@ -8,6 +8,7 @@ import MoneyText from "@/components/MoneyText";
 import StatusChip, { statusLabel } from "@/components/StatusChip";
 import { paths } from "@/routes/paths";
 import { fDateTime, fRelative } from "@/utils/format-time";
+import { uuidFilterOperators } from "@/utils/parseFilter";
 
 export const TRANSACTION_STATES = [
   "Received",
@@ -26,15 +27,15 @@ export const railLabel = (rail?: string | null) =>
 
 export const transactionColumns: GridColDef<TransactionRowFragment>[] = [
   {
-    field: "id",
-    headerName: "ID",
-    type: "number",
-    width: 110,
+    field: "reference",
+    headerName: "Reference",
+    width: 140,
+    sortable: false,
     align: "left",
     headerAlign: "left",
     renderCell: ({ row }) => (
       <Link to={paths.transactions.view(row.id)} className="link-primary link-underline-hover font-mono">
-        NXP-{row.id}
+        {row.reference}
       </Link>
     ),
   },
@@ -50,7 +51,7 @@ export const transactionColumns: GridColDef<TransactionRowFragment>[] = [
   {
     field: "customerId",
     headerName: "Customer",
-    type: "number",
+    filterOperators: uuidFilterOperators,
     minWidth: 200,
     flex: 1.2,
     sortable: false,

@@ -1,6 +1,9 @@
-import type { GridFilterModel } from "@mui/x-data-grid";
+import { getGridStringOperators, type GridFilterModel } from "@mui/x-data-grid";
 
 type Filter = Record<string, unknown>;
+
+/** UUID columns only support exact matches on the backend. */
+export const uuidFilterOperators = getGridStringOperators().filter((op) => op.value === "equals");
 
 /** MUI X operator -> backend filter operator (see nxpay-backend queryArgs.ts). */
 function toCondition(operator: string, value: unknown): unknown {

@@ -41,7 +41,7 @@ export const UPDATE_STAFF_USER = gql(`
 `);
 
 export const RESET_STAFF_TOTP = gql(`
-  mutation ResetStaffTotp($id: Int!) {
+  mutation ResetStaffTotp($id: ID!) {
     resetStaffTotp(id: $id) {
       ...StaffRow
     }

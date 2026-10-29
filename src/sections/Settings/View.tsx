@@ -100,8 +100,8 @@ function FeeAccountDialog({ open, onClose }: { open: boolean; onClose: () => voi
         <DialogTitle>Fee payout account</DialogTitle>
         <DialogContent className="flex flex-col gap-4">
           <Typography variant="body2" className="text-text-secondary">
-            Bridge sends the developer fees it collects to this US bank account. The details go straight to Bridge; NxPay
-            only shows the last 4 digits.
+            Bridge sends the developer fees it collects to this US bank account. The details go straight to Bridge;
+            NxPay only shows the last 4 digits.
           </Typography>
           <RHFTextField name="bankName" label="Bank name" />
           <RHFTextField name="accountOwnerName" label="Account holder" />

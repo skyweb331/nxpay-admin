@@ -78,7 +78,7 @@ const Row = ({ label, children }: { label: ReactNode; children: ReactNode }) => 
   </Box>
 );
 
-export default function TransactionDetailView({ id }: { id: number }) {
+export default function TransactionDetailView({ id }: { id: string }) {
   const { isAdmin } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
   const [confirmRetry, setConfirmRetry] = useState(false);
@@ -194,8 +194,8 @@ export default function TransactionDetailView({ id }: { id: number }) {
               ) : (
                 <>
                   <Typography variant="body2" className="text-text-secondary mb-2">
-                    Schedule #{tx.feeSchedule?.id} ({fPeriod(tx.feeSchedule?.effectivePeriod)}). Volume before this
-                    deposit: {formatMoney(breakdown.prevVolumeInCents, "usd")}.
+                    Fee schedule effective {fPeriod(tx.feeSchedule?.effectivePeriod)}. Volume before this deposit:{" "}
+                    {formatMoney(breakdown.prevVolumeInCents, "usd")}.
                     {breakdown.capped && " Fee was capped to keep the payout above the Bridge minimum."}
                   </Typography>
                   <Table size="small">

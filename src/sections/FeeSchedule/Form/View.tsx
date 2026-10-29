@@ -340,15 +340,15 @@ function Editor({ overview, schedule }: { overview: Overview; schedule: Schedule
   );
 }
 
-export default function FeeScheduleFormView({ id }: { id?: number }) {
+export default function FeeScheduleFormView({ id }: { id?: string }) {
   const overview = useQuery(FEE_OVERVIEW);
-  const detail = useQuery(FEE_SCHEDULE, { variables: { id: id ?? 0 }, skip: !id });
+  const detail = useQuery(FEE_SCHEDULE, { variables: { id: id ?? "" }, skip: !id });
   const schedule = detail.data?.feeSchedule ?? null;
-  const title = id ? `Edit fee schedule #${id}` : "New fee schedule";
+  const title = id ? "Edit fee schedule" : "New fee schedule";
   const editable = !schedule || schedule.status === "Draft" || schedule.status === "Scheduled";
 
   const header = (
-    <PageHeader title={title} crumbs={[{ label: "Fees", href: paths.fees.root }, { label: id ? `#${id}` : "New" }]} />
+    <PageHeader title={title} crumbs={[{ label: "Fees", href: paths.fees.root }, { label: id ? "Edit" : "New" }]} />
   );
 
   if ((overview.loading && !overview.data) || (id && detail.loading && !detail.data)) return <LoadingScreen inline />;

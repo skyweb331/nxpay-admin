@@ -59,7 +59,7 @@ export const WEBHOOK_EVENTS = gql(`
 `);
 
 export const REPLAY_WEBHOOK_EVENT = gql(`
-  mutation ReplayWebhookEvent($id: Int!) {
+  mutation ReplayWebhookEvent($id: ID!) {
     replayWebhookEvent(id: $id) {
       ...WebhookEventRow
     }

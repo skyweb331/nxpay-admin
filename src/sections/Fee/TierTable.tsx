@@ -5,7 +5,7 @@ import { tierRangeLabel } from "@/utils/fee";
 import { bpsToPercent } from "@/utils/money";
 
 export type TierRow = {
-  id: number;
+  id: string;
   position: number;
   fromInCents: bigint;
   toInCents?: bigint | null;
@@ -19,7 +19,7 @@ export function TierTable({
   dense,
 }: {
   tiers: TierRow[];
-  activeTierId?: number;
+  activeTierId?: string;
   dense?: boolean;
 }) {
   const sorted = [...tiers].sort((a, b) => a.position - b.position);

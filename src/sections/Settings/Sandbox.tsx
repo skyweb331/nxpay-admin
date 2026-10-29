@@ -19,7 +19,7 @@ import { centsToDecimal, formatMoney } from "@/utils/money";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-type Result = { id: number; state: string; currency: string; grossAmountInCents: bigint };
+type Result = { id: string; reference: string; state: string; currency: string; grossAmountInCents: bigint };
 
 export default function SandboxView() {
   const appInfo = useAppInfo();
@@ -38,7 +38,7 @@ export default function SandboxView() {
   const options = useMemo(
     () =>
       (customers.data?.customers.customers ?? []).map((c) => ({
-        value: String(c.id),
+        value: c.id,
         label: `${c.user?.name ?? `Customer ${c.id}`} (${c.user?.email ?? "no email"})`,
       })),
     [customers.data],
@@ -49,7 +49,7 @@ export default function SandboxView() {
       const { data } = await simulate({
         variables: {
           input: {
-            customerId: Number(values.customerId),
+            customerId: values.customerId,
             currency: values.currency,
             amount: centsToDecimal(values.amountInCents!),
           },
@@ -63,7 +63,7 @@ export default function SandboxView() {
         return;
       }
       setResults((prev) => [tx, ...prev].slice(0, 10));
-      enqueueSnackbar(`Deposit NXP-${tx.id} created`, { variant: "success" });
+      enqueueSnackbar(`Deposit ${tx.reference} created`, { variant: "success" });
       methods.resetField("amountInCents");
     } catch (e) {
       if (!applyServerErrors(e, methods.setError, ["customerId", "currency", "amountInCents"])) {
@@ -129,7 +129,7 @@ export default function SandboxView() {
                 results.map((tx) => (
                   <Box key={tx.id} className="flex flex-row items-center justify-between gap-2 py-1.5">
                     <Link to={paths.transactions.view(tx.id)} className="link-primary link-underline-hover font-mono">
-                      NXP-{tx.id}
+                      {tx.reference}
                     </Link>
                     <Typography variant="body2">{formatMoney(tx.grossAmountInCents, tx.currency)}</Typography>
                     <StatusChip kind="transaction" value={tx.state} />

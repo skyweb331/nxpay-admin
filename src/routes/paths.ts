@@ -4,7 +4,7 @@ const ROOTS = {
 
 const entity = (root: string) => ({
   root,
-  view: (id: number | string) => `${root}/${id}`,
+  view: (id: string) => `${root}/${id}`,
   match: `${root}/:id`,
 });
 
@@ -23,7 +23,7 @@ export const paths = {
   fees: {
     root: "/fees",
     new: "/fees/new",
-    edit: (id: number | string) => `/fees/${id}/edit`,
+    edit: (id: string) => `/fees/${id}/edit`,
     editMatch: "/fees/:id/edit",
   },
   support: entity("/support"),

@@ -37,7 +37,7 @@ const TABS = [
 
 type TabValue = (typeof TABS)[number]["value"];
 
-function SuspendDialog({ id, open, onClose }: { id: number; open: boolean; onClose: () => void }) {
+function SuspendDialog({ id, open, onClose }: { id: string; open: boolean; onClose: () => void }) {
   const { enqueueSnackbar } = useSnackbar();
   const [suspend] = useMutation(SUSPEND_CUSTOMER);
   const methods = useForm<SuspendValues>({ resolver: zodResolver(suspendSchema), defaultValues: { reason: "" } });
@@ -79,7 +79,7 @@ function SuspendDialog({ id, open, onClose }: { id: number; open: boolean; onClo
   );
 }
 
-export default function CustomerDetailView({ id }: { id: number }) {
+export default function CustomerDetailView({ id }: { id: string }) {
   const { isAdmin } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
   const [searchParams, setSearchParams] = useSearchParams();

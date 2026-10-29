@@ -53,6 +53,7 @@ export const SIMULATE_DEPOSIT = gql(`
   mutation SimulateDeposit($input: SimulateDepositInput!) {
     simulateDeposit(input: $input) {
       id
+      reference
       state
       currency
       grossAmountInCents

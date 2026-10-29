@@ -24,7 +24,7 @@ import { AUDIT_LOGS } from "@/libs/Logs/useApollo";
 import { useGridQuery } from "@/routes/hooks";
 import { fDateTime } from "@/utils/format-time";
 import { errorMessage } from "@/utils/graphql";
-import { andFilter } from "@/utils/parseFilter";
+import { andFilter, uuidFilterOperators } from "@/utils/parseFilter";
 import { useQuery } from "@apollo/client/react";
 
 function ChangesDialog({ log, onClose }: { log: AuditLogRowFragment | null; onClose: () => void }) {
@@ -83,7 +83,7 @@ export default function AuditLogListView({ scope }: { scope?: Record<string, unk
       {
         field: "actorId",
         headerName: "Actor",
-        type: "number",
+        filterOperators: uuidFilterOperators,
         minWidth: 200,
         flex: 1,
         sortable: false,

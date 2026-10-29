@@ -15,6 +15,7 @@ import { useGridQuery } from "@/routes/hooks";
 import { paths } from "@/routes/paths";
 import { fDateTime, fRelative } from "@/utils/format-time";
 import { errorMessage } from "@/utils/graphql";
+import { uuidFilterOperators } from "@/utils/parseFilter";
 import { useQuery } from "@apollo/client/react";
 
 export const TICKET_STATUSES = ["Open", "Pending", "Resolved", "Closed"] as const;
@@ -38,7 +39,7 @@ export default function SupportListView() {
               {row.subject}
             </Link>
             <Typography variant="caption" className="text-text-secondary">
-              #{row.id} · opened {fDateTime(row.createdAt)}
+              {row.reference} · opened {fDateTime(row.createdAt)}
             </Typography>
           </Box>
         ),
@@ -46,7 +47,7 @@ export default function SupportListView() {
       {
         field: "customerId",
         headerName: "Customer",
-        type: "number",
+        filterOperators: uuidFilterOperators,
         minWidth: 200,
         flex: 1,
         sortable: false,
@@ -77,7 +78,7 @@ export default function SupportListView() {
       {
         field: "assigneeId",
         headerName: "Assignee",
-        type: "number",
+        filterOperators: uuidFilterOperators,
         width: 160,
         sortable: false,
         align: "left",

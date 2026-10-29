@@ -18,7 +18,7 @@ import { formatMoney } from "@/utils/money";
 import { useQuery } from "@apollo/client/react";
 
 /** Last 24 billing months, USD equivalent (the basis of the tiered fee). */
-export function VolumesTab({ customerId }: { customerId: number }) {
+export function VolumesTab({ customerId }: { customerId: string }) {
   const { data, loading, error } = useQuery(CUSTOMER_VOLUMES, {
     variables: { filter: { customerId }, sort: "periodKey", page: "1,24" },
   });

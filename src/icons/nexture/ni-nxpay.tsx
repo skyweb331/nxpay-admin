@@ -13,7 +13,16 @@ export default function NiNxpay({ className, variant = "outlined", size = "mediu
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" fill="none" stroke="currentColor" strokeWidth={iconStrokeWidth} />
+        <rect
+          x="2.5"
+          y="2.5"
+          width="19"
+          height="19"
+          rx="5.5"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={iconStrokeWidth}
+        />
         <path
           d="M7.5 17V7.5L16 16V7M13.25 9.75L16 7L18.75 9.75"
           fill="none"
@@ -39,7 +48,7 @@ export default function NiNxpay({ className, variant = "outlined", size = "mediu
           <rect x="2" y="2" width="20" height="20" rx="6" fill="white" />
           <path
             d="M7.5 17V7.5L16 16V7M13.25 9.75L16 7L18.75 9.75"
-          fill="none"
+            fill="none"
             stroke="black"
             strokeWidth="2"
             strokeLinecap="round"

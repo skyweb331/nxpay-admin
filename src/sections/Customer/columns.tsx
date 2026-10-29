@@ -7,6 +7,7 @@ import type { CustomerRowFragment } from "@/__generated__/graphql";
 import StatusChip, { statusLabel } from "@/components/StatusChip";
 import { paths } from "@/routes/paths";
 import { fDate, fRelative } from "@/utils/format-time";
+import { uuidFilterOperators } from "@/utils/parseFilter";
 
 const KYC_STATUSES = [
   "not_started",
@@ -33,7 +34,7 @@ export const customerColumns: GridColDef<CustomerRowFragment>[] = [
   {
     field: "id",
     headerName: "Customer",
-    type: "number",
+    filterOperators: uuidFilterOperators,
     minWidth: 240,
     flex: 1.5,
     align: "left",

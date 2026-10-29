@@ -7,8 +7,8 @@ export default function Page() {
 
   return (
     <>
-      <Helmet title={id ? `Edit fee schedule #${id}` : "New fee schedule"} />
-      <View key={id ?? "new"} id={id ? Number(id) : undefined} />
+      <Helmet title={id ? "Edit fee schedule" : "New fee schedule"} />
+      <View key={id ?? "new"} id={id} />
     </>
   );
 }

@@ -56,7 +56,7 @@ export const FEE_SCHEDULES = gql(`
 `);
 
 export const FEE_SCHEDULE = gql(`
-  query FeeSchedule($id: Int!) {
+  query FeeSchedule($id: ID!) {
     feeSchedule(id: $id) {
       ...FeeScheduleFields
     }
@@ -88,7 +88,7 @@ export const PUBLISH_FEE_SCHEDULE = gql(`
 `);
 
 export const CANCEL_FEE_SCHEDULE = gql(`
-  mutation CancelFeeSchedule($id: Int!) {
+  mutation CancelFeeSchedule($id: ID!) {
     cancelFeeSchedule(id: $id) {
       ...FeeScheduleFields
     }

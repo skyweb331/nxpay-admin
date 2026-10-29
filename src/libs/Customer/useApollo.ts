@@ -51,7 +51,7 @@ export const CUSTOMER_WALLET = gql(`
 `);
 
 export const CUSTOMER_DETAIL = gql(`
-  query CustomerDetail($id: Int!) {
+  query CustomerDetail($id: ID!) {
     customer(id: $id) {
       ...CustomerRow
       bridgeCustomerId
@@ -108,7 +108,7 @@ export const SUSPEND_CUSTOMER = gql(`
 `);
 
 export const REACTIVATE_CUSTOMER = gql(`
-  mutation ReactivateCustomer($id: Int!) {
+  mutation ReactivateCustomer($id: ID!) {
     reactivateCustomer(id: $id) {
       ...CustomerRow
     }
@@ -116,7 +116,7 @@ export const REACTIVATE_CUSTOMER = gql(`
 `);
 
 export const REGENERATE_CUSTOMER_KYC_LINK = gql(`
-  mutation RegenerateCustomerKycLink($id: Int!) {
+  mutation RegenerateCustomerKycLink($id: ID!) {
     regenerateCustomerKycLink(id: $id) {
       id
       kycLink
@@ -128,7 +128,7 @@ export const REGENERATE_CUSTOMER_KYC_LINK = gql(`
 `);
 
 export const DEACTIVATE_VIRTUAL_ACCOUNT = gql(`
-  mutation DeactivateVirtualAccount($id: Int!) {
+  mutation DeactivateVirtualAccount($id: ID!) {
     deactivateVirtualAccount(id: $id) {
       id
       status

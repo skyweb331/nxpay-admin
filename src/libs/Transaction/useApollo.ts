@@ -3,6 +3,7 @@ import { gql } from "@/__generated__";
 export const TRANSACTION_ROW = gql(`
   fragment TransactionRow on Transaction {
     id
+    reference
     state
     currency
     rail
@@ -41,7 +42,7 @@ export const TRANSACTIONS = gql(`
 `);
 
 export const TRANSACTION_DETAIL = gql(`
-  query TransactionDetail($id: Int!) {
+  query TransactionDetail($id: ID!) {
     transaction(id: $id) {
       ...TransactionRow
       bridgeDepositId
@@ -79,7 +80,7 @@ export const TRANSACTION_DETAIL = gql(`
 `);
 
 export const RETRY_PAYOUT = gql(`
-  mutation RetryPayout($id: Int!) {
+  mutation RetryPayout($id: ID!) {
     retryPayout(id: $id) {
       ...TransactionRow
     }

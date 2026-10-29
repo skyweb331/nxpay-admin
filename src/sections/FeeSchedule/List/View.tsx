@@ -77,7 +77,7 @@ function ScheduleCard({
         ) : (
           <>
             <Typography variant="body2" className="text-text-secondary mb-2">
-              From {fPeriod(schedule.effectivePeriod)} 1st · #{schedule.id}
+              From {fPeriod(schedule.effectivePeriod)} 1st
               {schedule.publishedBy && ` · published by ${schedule.publishedBy.name}`}
               {schedule.notifyCustomers && schedule.status === "Scheduled" && " · customers emailed"}
             </Typography>
@@ -175,14 +175,6 @@ export default function FeeScheduleListView() {
 
   const columns = useMemo<GridColDef<Schedule>[]>(
     () => [
-      {
-        field: "id",
-        headerName: "#",
-        type: "number",
-        width: 80,
-        align: "left",
-        headerAlign: "left",
-      },
       {
         field: "effectivePeriod",
         headerName: "Takes effect",

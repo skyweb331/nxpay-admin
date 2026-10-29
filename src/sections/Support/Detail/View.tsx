@@ -39,7 +39,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 const UNASSIGNED = "none";
 
-export default function SupportDetailView({ id }: { id: number }) {
+export default function SupportDetailView({ id }: { id: string }) {
   const { user, isAdmin } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
   const { data, loading, error } = useQuery(SUPPORT_TICKET, { variables: { id }, pollInterval: 30_000 });
@@ -53,7 +53,7 @@ export default function SupportDetailView({ id }: { id: number }) {
   const methods = useForm<ReplyValues>({ resolver: zodResolver(replySchema), defaultValues: { body: "" } });
   const ticket = data?.supportTicket;
 
-  const assigneeMap = new Map<number, string>();
+  const assigneeMap = new Map<string, string>();
   if (user) assigneeMap.set(user.id, `${user.name} (me)`);
   for (const s of staff.data?.staffUsers.users ?? []) {
     if (!s.deletedAt && !assigneeMap.has(s.id)) assigneeMap.set(s.id, s.name);
@@ -73,7 +73,7 @@ export default function SupportDetailView({ id }: { id: number }) {
     }
   });
 
-  const patch = async (input: { status?: TicketStatus; assigneeId?: number | null }) => {
+  const patch = async (input: { status?: TicketStatus; assigneeId?: string | null }) => {
     try {
       await update({ variables: { input: { id, ...input } } });
       enqueueSnackbar("Ticket updated", { variant: "success" });
@@ -183,15 +183,15 @@ export default function SupportDetailView({ id }: { id: number }) {
                 <Select
                   labelId="ticket-assignee"
                   label="Assignee"
-                  value={ticket.assigneeId ? String(ticket.assigneeId) : UNASSIGNED}
+                  value={ticket.assigneeId ?? UNASSIGNED}
                   disabled={updateState.loading}
                   IconComponent={NiChevronDownSmall}
                   MenuProps={{ className: "outlined" }}
-                  onChange={(e) => patch({ assigneeId: e.target.value === UNASSIGNED ? null : Number(e.target.value) })}
+                  onChange={(e) => patch({ assigneeId: e.target.value === UNASSIGNED ? null : e.target.value })}
                 >
                   <MenuItem value={UNASSIGNED}>Unassigned</MenuItem>
                   {assignees.map(([value, name]) => (
-                    <MenuItem key={value} value={String(value)}>
+                    <MenuItem key={value} value={value}>
                       {name}
                     </MenuItem>
                   ))}

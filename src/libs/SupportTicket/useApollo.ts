@@ -3,6 +3,7 @@ import { gql } from "@/__generated__";
 export const SUPPORT_TICKET_ROW = gql(`
   fragment SupportTicketRow on SupportTicket {
     id
+    reference
     subject
     status
     lastMessageAt
@@ -36,7 +37,7 @@ export const SUPPORT_TICKETS = gql(`
 `);
 
 export const SUPPORT_TICKET = gql(`
-  query SupportTicket($id: Int!) {
+  query SupportTicket($id: ID!) {
     supportTicket(id: $id) {
       ...SupportTicketRow
       messages {

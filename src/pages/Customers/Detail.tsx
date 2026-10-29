@@ -8,7 +8,7 @@ export default function Page() {
   return (
     <>
       <Helmet title={`Customer ${id}`} />
-      <View key={id} id={Number(id)} />
+      <View key={id} id={id} />
     </>
   );
 }
