@@ -16,7 +16,7 @@ import { Form, FormErrorSummary, RHFTextField } from "@/components/Form";
 import ContentWrapper from "@/components/layout/containers/content-wrapper";
 import LoadingScreen from "@/components/LoadingScreen";
 import PageHeader from "@/components/PageHeader";
-import { CUSTOMER_DETAIL, REACTIVATE_CUSTOMER, SUSPEND_CUSTOMER } from "@/libs/Customer/useApollo";
+import { APPROVE_CUSTOMER, CUSTOMER_DETAIL, REACTIVATE_CUSTOMER, SUSPEND_CUSTOMER } from "@/libs/Customer/useApollo";
 import { paths } from "@/routes/paths";
 import AuditLogListView from "@/sections/AuditLog/List/View";
 import TransactionListView from "@/sections/Transaction/List/View";
@@ -86,12 +86,25 @@ export default function CustomerDetailView({ id }: { id: string }) {
   const [reactivateOpen, setReactivateOpen] = useState(false);
   const { data, loading, error } = useQuery(CUSTOMER_DETAIL, { variables: { id } });
   const [reactivate, reactivateState] = useMutation(REACTIVATE_CUSTOMER);
+  const [approveOpen, setApproveOpen] = useState(false);
+  const [approve, approveState] = useMutation(APPROVE_CUSTOMER);
 
   const tabs = TABS.filter((t) => !("adminOnly" in t) || isAdmin);
   const requested = searchParams.get("tab");
   const tab: TabValue = tabs.find((t) => t.value === requested)?.value ?? "profile";
   const customer = data?.customer;
   const name = customer?.user?.name ?? "Customer";
+  const awaitingApproval = !!customer?.user && !customer.user.approvedAt;
+
+  const onApprove = async () => {
+    try {
+      await approve({ variables: { id } });
+      enqueueSnackbar("Customer approved. We emailed them a sign-in link.", { variant: "success" });
+      setApproveOpen(false);
+    } catch (e) {
+      enqueueSnackbar(errorMessage(e), { variant: "error" });
+    }
+  };
 
   const onReactivate = async () => {
     try {
@@ -108,7 +121,11 @@ export default function CustomerDetailView({ id }: { id: string }) {
       title={name}
       crumbs={[{ label: "Customers", href: paths.customers.root }, { label: name }]}
       actions={
-        isAdmin && customer ? (
+        awaitingApproval ? (
+          <Button variant="contained" onClick={() => setApproveOpen(true)}>
+            Approve
+          </Button>
+        ) : isAdmin && customer ? (
           customer.status === "Suspended" ? (
             <Button variant="contained" onClick={() => setReactivateOpen(true)}>
               Reactivate
@@ -139,6 +156,11 @@ export default function CustomerDetailView({ id }: { id: string }) {
     <>
       {header}
       <ContentWrapper>
+        {awaitingApproval && (
+          <Alert severity="warning" className="mb-4">
+            Signed up {fDateTime(customer.createdAt)} and can't sign in until you approve the account.
+          </Alert>
+        )}
         {customer.status === "Suspended" && (
           <Alert severity="error" className="mb-4">
             Suspended {fDateTime(customer.suspendedAt)}. The reason is in the audit history.
@@ -181,6 +203,15 @@ export default function CustomerDetailView({ id }: { id: string }) {
       </ContentWrapper>
 
       <SuspendDialog id={customer.id} open={suspendOpen} onClose={() => setSuspendOpen(false)} />
+      <ConfirmDialog
+        open={approveOpen}
+        title={`Approve ${name}?`}
+        description="They can sign in right away and we email them a sign-in link. KYC with Bridge still applies before they get bank accounts."
+        confirmLabel="Approve"
+        loading={approveState.loading}
+        onConfirm={onApprove}
+        onClose={() => setApproveOpen(false)}
+      />
       <ConfirmDialog
         open={reactivateOpen}
         title="Reactivate this customer?"

@@ -16,6 +16,7 @@ const MAPS = {
     Refunded: { label: "Refunded", color: "grey" },
   },
   customer: {
+    AwaitingApproval: { label: "Awaiting approval", color: "warning" },
     Onboarding: { label: "Onboarding", color: "info" },
     Active: { label: "Active", color: "success" },
     Suspended: { label: "Suspended", color: "error" },

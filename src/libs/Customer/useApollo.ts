@@ -19,14 +19,15 @@ export const CUSTOMER_ROW = gql(`
       email
       isEmailVerified
       totpEnabled
+      approvedAt
       lastLoginAt
     }
   }
 `);
 
 export const CUSTOMERS = gql(`
-  query Customers($page: String, $sort: String, $filter: JSONObject, $search: String) {
-    customers(page: $page, sort: $sort, filter: $filter, search: $search) {
+  query Customers($page: String, $sort: String, $filter: JSONObject, $search: String, $awaitingApproval: Boolean) {
+    customers(page: $page, sort: $sort, filter: $filter, search: $search, awaitingApproval: $awaitingApproval) {
       total
       customers {
         ...CustomerRow
@@ -112,6 +113,18 @@ export const REACTIVATE_CUSTOMER = gql(`
   mutation ReactivateCustomer($id: ID!) {
     reactivateCustomer(id: $id) {
       ...CustomerRow
+    }
+  }
+`);
+
+export const APPROVE_CUSTOMER = gql(`
+  mutation ApproveCustomer($id: ID!) {
+    approveCustomer(id: $id) {
+      id
+      user {
+        id
+        approvedAt
+      }
     }
   }
 `);

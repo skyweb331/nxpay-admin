@@ -1,9 +1,8 @@
 import { customerColumns } from "../columns";
-
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 
-import { Alert, Box, Card, CardContent, InputAdornment, TextField } from "@mui/material";
+import { Alert, Box, Card, CardContent, Chip, InputAdornment, TextField } from "@mui/material";
 
 import DataTable from "@/components/DataTable";
 import EmptyState from "@/components/EmptyState";
@@ -18,11 +17,24 @@ import { useQuery } from "@apollo/client/react";
 export default function CustomerListView() {
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get("q") ?? "";
+  const awaitingApproval = searchParams.get("pending") === "1";
   const [term, setTerm] = useState(search);
   const { variables, gridProps } = useGridQuery({ defaultSort: [{ field: "createdAt", sort: "desc" }] });
   const { data, previousData, loading, error } = useQuery(CUSTOMERS, {
-    variables: { ...variables, search: search || undefined },
+    variables: { ...variables, search: search || undefined, awaitingApproval: awaitingApproval || undefined },
   });
+
+  const toggleAwaitingApproval = () =>
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        if (awaitingApproval) next.delete("pending");
+        else next.set("pending", "1");
+        next.delete("page");
+        return next;
+      },
+      { replace: true },
+    );
   const result = (data ?? previousData)?.customers;
 
   useEffect(() => {
@@ -53,8 +65,9 @@ export default function CustomerListView() {
       )}
       <Card>
         <CardContent>
-          <Box className="mb-4 max-w-md">
+          <Box className="mb-4 flex flex-wrap items-center gap-3">
             <TextField
+              className="max-w-md flex-1"
               fullWidth
               size="small"
               placeholder="Search name or email"
@@ -71,6 +84,12 @@ export default function CustomerListView() {
                 },
               }}
             />
+            <Chip
+              label="Awaiting approval"
+              color={awaitingApproval ? "warning" : "default"}
+              variant={awaitingApproval ? "filled" : "outlined"}
+              onClick={toggleAwaitingApproval}
+            />
           </Box>
           <DataTable
             {...gridProps}
@@ -82,7 +101,13 @@ export default function CustomerListView() {
               noRowsOverlay: () => (
                 <EmptyState
                   icon={<NiUsers size={40} />}
-                  title={search ? "No matching customers" : "No customers yet"}
+                  title={
+                    awaitingApproval
+                      ? "No sign-ups awaiting approval"
+                      : search
+                        ? "No matching customers"
+                        : "No customers yet"
+                  }
                   description={search ? "Try a different name, email or ID." : undefined}
                 />
               ),

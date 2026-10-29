@@ -30,6 +30,10 @@ export const ONBOARDING_STEP_LABELS: Record<string, string> = {
   Rejected: "Rejected",
 };
 
+/** Sign-ups staff haven't approved can't sign in yet, whatever their onboarding status. */
+export const customerStatus = (row: CustomerRowFragment) =>
+  row.user && !row.user.approvedAt ? "AwaitingApproval" : row.status;
+
 export const customerColumns: GridColDef<CustomerRowFragment>[] = [
   {
     field: "id",
@@ -77,7 +81,7 @@ export const customerColumns: GridColDef<CustomerRowFragment>[] = [
       label: statusLabel("customer", value),
     })),
     width: 130,
-    renderCell: ({ row }) => <StatusChip kind="customer" value={row.status} />,
+    renderCell: ({ row }) => <StatusChip kind="customer" value={customerStatus(row)} />,
   },
   {
     field: "kycStatus",
