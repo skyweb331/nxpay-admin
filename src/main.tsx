@@ -33,6 +33,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    {/* In a navigation transition, Apollo store updates re-render the old URL, so URL-driven
+        queries (list pages, filters) fetched the old and new variables in turn for ~5s. */}
+    <RouterProvider router={router} useTransitions={false} />
   </StrictMode>,
 );

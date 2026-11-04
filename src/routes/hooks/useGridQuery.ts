@@ -12,26 +12,30 @@ import { parseFilterModel } from "@/utils/parseFilter";
  */
 export function useGridQuery({ pageSize = 25, defaultSort }: { pageSize?: number; defaultSort?: GridSortModel } = {}) {
   const [searchParams, setSearchParams] = useSearchParams();
+  // DataGrid jumps to page 1 whenever it receives a new sort or filter model object,
+  // so the models are memoized on the raw URL values (and callers' inline `defaultSort`).
+  const pageParam = searchParams.get("page") ?? "";
+  const sortParam = searchParams.get("sort") ?? "";
+  const filterParam = searchParams.get("filter") ?? "";
+  const defaultSortKey = JSON.stringify(defaultSort ?? []);
 
   const paginationModel = useMemo<GridPaginationModel>(() => {
-    const [page, size] = (searchParams.get("page") ?? "").split(",").map((v) => parseInt(v, 10));
+    const [page, size] = pageParam.split(",").map((v) => parseInt(v, 10));
     return { page: Number.isFinite(page) && page! > 0 ? page! - 1 : 0, pageSize: size || pageSize };
-  }, [searchParams, pageSize]);
+  }, [pageParam, pageSize]);
 
   const sortModel = useMemo<GridSortModel>(() => {
-    const sort = searchParams.get("sort");
-    if (!sort) return defaultSort ?? [];
-    return sort.split(",").map((s) => ({ field: s.replace(/^-/, ""), sort: s.startsWith("-") ? "asc" : "desc" }));
-  }, [searchParams, defaultSort]);
+    if (!sortParam) return JSON.parse(defaultSortKey) as GridSortModel;
+    return sortParam.split(",").map((s) => ({ field: s.replace(/^-/, ""), sort: s.startsWith("-") ? "asc" : "desc" }));
+  }, [sortParam, defaultSortKey]);
 
   const filterModel = useMemo<GridFilterModel>(() => {
     try {
-      const raw = searchParams.get("filter");
-      return raw ? (JSON.parse(raw) as GridFilterModel) : { items: [] };
+      return filterParam ? (JSON.parse(filterParam) as GridFilterModel) : { items: [] };
     } catch {
       return { items: [] };
     }
-  }, [searchParams]);
+  }, [filterParam]);
 
   const update = useCallback(
     (patch: Record<string, string | null>) => {
