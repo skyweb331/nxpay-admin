@@ -27,6 +27,8 @@ type Documents = {
     "\n  query CustomerVolumes($filter: JSONObject, $page: String, $sort: String) {\n    monthlyVolumes(filter: $filter, page: $page, sort: $sort) {\n      total\n      monthlyVolumes {\n        id\n        periodKey\n        volumeInCents\n        feeInCents\n        txCount\n      }\n    }\n  }\n": typeof types.CustomerVolumesDocument,
     "\n  mutation SuspendCustomer($data: SuspendCustomerInput!) {\n    suspendCustomer(data: $data) {\n      ...CustomerRow\n    }\n  }\n": typeof types.SuspendCustomerDocument,
     "\n  mutation ReactivateCustomer($id: ID!) {\n    reactivateCustomer(id: $id) {\n      ...CustomerRow\n    }\n  }\n": typeof types.ReactivateCustomerDocument,
+    "\n  mutation BulkSuspendCustomers($data: BulkSuspendCustomersInput!) {\n    bulkSuspendCustomers(data: $data) {\n      succeeded\n      skipped {\n        id\n        name\n        reason\n      }\n    }\n  }\n": typeof types.BulkSuspendCustomersDocument,
+    "\n  mutation DeleteCustomers($ids: [ID!]!) {\n    deleteCustomers(ids: $ids) {\n      succeeded\n      skipped {\n        id\n        name\n        reason\n      }\n    }\n  }\n": typeof types.DeleteCustomersDocument,
     "\n  mutation ApproveCustomer($id: ID!) {\n    approveCustomer(id: $id) {\n      id\n      user {\n        id\n        approvedAt\n      }\n    }\n  }\n": typeof types.ApproveCustomerDocument,
     "\n  mutation RegenerateCustomerKycLink($id: ID!) {\n    regenerateCustomerKycLink(id: $id) {\n      id\n      kycLink\n      kycStatus\n      tosStatus\n      onboardingStep\n    }\n  }\n": typeof types.RegenerateCustomerKycLinkDocument,
     "\n  mutation DeactivateVirtualAccount($id: ID!) {\n    deactivateVirtualAccount(id: $id) {\n      id\n      status\n      deactivatedAt\n    }\n  }\n": typeof types.DeactivateVirtualAccountDocument,
@@ -81,6 +83,8 @@ const documents: Documents = {
     "\n  query CustomerVolumes($filter: JSONObject, $page: String, $sort: String) {\n    monthlyVolumes(filter: $filter, page: $page, sort: $sort) {\n      total\n      monthlyVolumes {\n        id\n        periodKey\n        volumeInCents\n        feeInCents\n        txCount\n      }\n    }\n  }\n": types.CustomerVolumesDocument,
     "\n  mutation SuspendCustomer($data: SuspendCustomerInput!) {\n    suspendCustomer(data: $data) {\n      ...CustomerRow\n    }\n  }\n": types.SuspendCustomerDocument,
     "\n  mutation ReactivateCustomer($id: ID!) {\n    reactivateCustomer(id: $id) {\n      ...CustomerRow\n    }\n  }\n": types.ReactivateCustomerDocument,
+    "\n  mutation BulkSuspendCustomers($data: BulkSuspendCustomersInput!) {\n    bulkSuspendCustomers(data: $data) {\n      succeeded\n      skipped {\n        id\n        name\n        reason\n      }\n    }\n  }\n": types.BulkSuspendCustomersDocument,
+    "\n  mutation DeleteCustomers($ids: [ID!]!) {\n    deleteCustomers(ids: $ids) {\n      succeeded\n      skipped {\n        id\n        name\n        reason\n      }\n    }\n  }\n": types.DeleteCustomersDocument,
     "\n  mutation ApproveCustomer($id: ID!) {\n    approveCustomer(id: $id) {\n      id\n      user {\n        id\n        approvedAt\n      }\n    }\n  }\n": types.ApproveCustomerDocument,
     "\n  mutation RegenerateCustomerKycLink($id: ID!) {\n    regenerateCustomerKycLink(id: $id) {\n      id\n      kycLink\n      kycStatus\n      tosStatus\n      onboardingStep\n    }\n  }\n": types.RegenerateCustomerKycLinkDocument,
     "\n  mutation DeactivateVirtualAccount($id: ID!) {\n    deactivateVirtualAccount(id: $id) {\n      id\n      status\n      deactivatedAt\n    }\n  }\n": types.DeactivateVirtualAccountDocument,
@@ -188,6 +192,14 @@ export function gql(source: "\n  mutation SuspendCustomer($data: SuspendCustomer
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation ReactivateCustomer($id: ID!) {\n    reactivateCustomer(id: $id) {\n      ...CustomerRow\n    }\n  }\n"): (typeof documents)["\n  mutation ReactivateCustomer($id: ID!) {\n    reactivateCustomer(id: $id) {\n      ...CustomerRow\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation BulkSuspendCustomers($data: BulkSuspendCustomersInput!) {\n    bulkSuspendCustomers(data: $data) {\n      succeeded\n      skipped {\n        id\n        name\n        reason\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation BulkSuspendCustomers($data: BulkSuspendCustomersInput!) {\n    bulkSuspendCustomers(data: $data) {\n      succeeded\n      skipped {\n        id\n        name\n        reason\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation DeleteCustomers($ids: [ID!]!) {\n    deleteCustomers(ids: $ids) {\n      succeeded\n      skipped {\n        id\n        name\n        reason\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteCustomers($ids: [ID!]!) {\n    deleteCustomers(ids: $ids) {\n      succeeded\n      skipped {\n        id\n        name\n        reason\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

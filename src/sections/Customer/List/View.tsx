@@ -1,9 +1,12 @@
 import { customerColumns } from "../columns";
+import { BulkActions } from "./BulkActions";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 
 import { Alert, Box, Card, CardContent, Chip, InputAdornment, TextField } from "@mui/material";
+import type { GridRowSelectionModel } from "@mui/x-data-grid";
 
+import { useAuthContext } from "@/auth";
 import DataTable from "@/components/DataTable";
 import EmptyState from "@/components/EmptyState";
 import ContentWrapper from "@/components/layout/containers/content-wrapper";
@@ -14,7 +17,10 @@ import { useGridQuery } from "@/routes/hooks";
 import { errorMessage } from "@/utils/graphql";
 import { useQuery } from "@apollo/client/react";
 
+const EMPTY_SELECTION: GridRowSelectionModel = { type: "include", ids: new Set() };
+
 export default function CustomerListView() {
+  const { isAdmin } = useAuthContext();
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get("q") ?? "";
   const awaitingApproval = searchParams.get("pending") === "1";
@@ -36,6 +42,15 @@ export default function CustomerListView() {
       { replace: true },
     );
   const result = (data ?? previousData)?.customers;
+  const rows = result?.customers ?? [];
+
+  const [selection, setSelection] = useState<GridRowSelectionModel>(EMPTY_SELECTION);
+  const clearSelection = () => setSelection(EMPTY_SELECTION);
+  // "Exclude" means everything on the page except those ids (header checkbox)
+  const selectedIds =
+    selection.type === "include"
+      ? [...selection.ids].map(String)
+      : rows.map((r) => r.id).filter((id) => !selection.ids.has(id));
 
   useEffect(() => {
     if (term.trim() === search) return;
@@ -91,12 +106,17 @@ export default function CustomerListView() {
               onClick={toggleAwaitingApproval}
             />
           </Box>
+          {isAdmin && <BulkActions ids={selectedIds} onDone={clearSelection} />}
           <DataTable
             {...gridProps}
-            rows={result?.customers ?? []}
+            rows={rows}
             rowCount={result?.total ?? 0}
             columns={customerColumns}
             loading={loading && !result}
+            checkboxSelection={isAdmin}
+            keepNonExistentRowsSelected
+            rowSelectionModel={selection}
+            onRowSelectionModelChange={setSelection}
             slots={{
               noRowsOverlay: () => (
                 <EmptyState

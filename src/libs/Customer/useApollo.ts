@@ -117,6 +117,32 @@ export const REACTIVATE_CUSTOMER = gql(`
   }
 `);
 
+export const BULK_SUSPEND_CUSTOMERS = gql(`
+  mutation BulkSuspendCustomers($data: BulkSuspendCustomersInput!) {
+    bulkSuspendCustomers(data: $data) {
+      succeeded
+      skipped {
+        id
+        name
+        reason
+      }
+    }
+  }
+`);
+
+export const DELETE_CUSTOMERS = gql(`
+  mutation DeleteCustomers($ids: [ID!]!) {
+    deleteCustomers(ids: $ids) {
+      succeeded
+      skipped {
+        id
+        name
+        reason
+      }
+    }
+  }
+`);
+
 export const APPROVE_CUSTOMER = gql(`
   mutation ApproveCustomer($id: ID!) {
     approveCustomer(id: $id) {
