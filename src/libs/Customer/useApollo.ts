@@ -155,6 +155,19 @@ export const APPROVE_CUSTOMER = gql(`
   }
 `);
 
+export const UPDATE_CUSTOMER_EMAIL = gql(`
+  mutation UpdateCustomerEmail($data: UpdateCustomerEmailInput!) {
+    updateCustomerEmail(data: $data) {
+      id
+      user {
+        id
+        email
+        isEmailVerified
+      }
+    }
+  }
+`);
+
 export const REGENERATE_CUSTOMER_KYC_LINK = gql(`
   mutation RegenerateCustomerKycLink($id: ID!) {
     regenerateCustomerKycLink(id: $id) {

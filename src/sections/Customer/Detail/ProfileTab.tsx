@@ -1,20 +1,40 @@
 import { ONBOARDING_STEP_LABELS } from "../columns";
-
+import { changeEmailSchema, type ChangeEmailValues } from "../schema";
 import { useSnackbar } from "notistack";
 import { ReactNode, useState } from "react";
+import { useForm } from "react-hook-form";
 
-import { Box, Button, Card, CardContent, Chip, Grid, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  Typography,
+} from "@mui/material";
 
 import type { CustomerDetailQuery } from "@/__generated__/graphql";
 import { useAuthContext } from "@/auth";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { CopyField } from "@/components/CopyButton";
+import { Form, FormErrorSummary, RHFTextField } from "@/components/Form";
 import JsonView from "@/components/JsonView";
 import StatusChip from "@/components/StatusChip";
-import { REGENERATE_CUSTOMER_KYC_LINK, RESET_CUSTOMER_TWO_FACTOR } from "@/libs/Customer/useApollo";
+import {
+  REGENERATE_CUSTOMER_KYC_LINK,
+  RESET_CUSTOMER_TWO_FACTOR,
+  UPDATE_CUSTOMER_EMAIL,
+} from "@/libs/Customer/useApollo";
 import { fDateTime } from "@/utils/format-time";
-import { errorMessage } from "@/utils/graphql";
+import { applyServerErrors, errorMessage } from "@/utils/graphql";
 import { useMutation } from "@apollo/client/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 type Customer = NonNullable<CustomerDetailQuery["customer"]>;
 
@@ -93,6 +113,79 @@ function KycLink({ customer }: { customer: Customer }) {
   );
 }
 
+function EmailRow({ customer }: { customer: Customer }) {
+  const { isAdmin } = useAuthContext();
+  const { enqueueSnackbar } = useSnackbar();
+  const [open, setOpen] = useState(false);
+  const [changeEmail] = useMutation(UPDATE_CUSTOMER_EMAIL);
+  const methods = useForm<ChangeEmailValues>({
+    resolver: zodResolver(changeEmailSchema),
+    defaultValues: { email: customer.user?.email ?? "" },
+  });
+
+  const openDialog = () => {
+    methods.reset({ email: customer.user?.email ?? "" });
+    setOpen(true);
+  };
+
+  const onSubmit = methods.handleSubmit(async ({ email }) => {
+    try {
+      await changeEmail({ variables: { data: { id: customer.id, email } } });
+      enqueueSnackbar("Email updated. We sent a verification code to the new address.", { variant: "success" });
+      setOpen(false);
+    } catch (e) {
+      if (!applyServerErrors(e, methods.setError, ["email"])) enqueueSnackbar(errorMessage(e), { variant: "error" });
+    }
+  });
+
+  return (
+    <>
+      <Row label="Email">
+        {customer.user?.email ?? "—"}
+        {customer.user && !customer.user.isEmailVerified && (
+          <Chip size="small" color="warning" label="unverified" className="ms-2" />
+        )}
+        {isAdmin && customer.user && (
+          <Button size="small" variant="text" className="ms-2" onClick={openDialog}>
+            Change
+          </Button>
+        )}
+      </Row>
+      <Dialog
+        open={open}
+        onClose={methods.formState.isSubmitting ? undefined : () => setOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <Form methods={methods} onSubmit={onSubmit}>
+          <DialogTitle>Change email address?</DialogTitle>
+          <DialogContent className="flex flex-col gap-4">
+            <Alert severity="warning">
+              The new address is used for sign-in right away and marked unverified. We email a verification code there
+              and notify the previous address.
+            </Alert>
+            <RHFTextField name="email" label="New email" type="email" autoFocus autoComplete="off" />
+            <FormErrorSummary />
+          </DialogContent>
+          <DialogActions>
+            <Button
+              variant="text"
+              color="grey"
+              onClick={() => setOpen(false)}
+              disabled={methods.formState.isSubmitting}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" variant="contained" loading={methods.formState.isSubmitting}>
+              Change email
+            </Button>
+          </DialogActions>
+        </Form>
+      </Dialog>
+    </>
+  );
+}
+
 function TwoFactorRow({ customer }: { customer: Customer }) {
   const { isAdmin } = useAuthContext();
   const { enqueueSnackbar } = useSnackbar();
@@ -146,12 +239,7 @@ export function ProfileTab({ customer }: { customer: Customer }) {
               Profile
             </Typography>
             <Row label="Name">{customer.user?.name ?? "—"}</Row>
-            <Row label="Email">
-              {customer.user?.email ?? "—"}
-              {customer.user && !customer.user.isEmailVerified && (
-                <Chip size="small" color="warning" label="unverified" className="ms-2" />
-              )}
-            </Row>
+            <EmailRow customer={customer} />
             <Row label="Account type">
               {customer.type === "business" ? "Business" : customer.type ? "Individual" : "—"}
             </Row>

@@ -30,6 +30,7 @@ type Documents = {
     "\n  mutation BulkSuspendCustomers($data: BulkSuspendCustomersInput!) {\n    bulkSuspendCustomers(data: $data) {\n      succeeded\n      skipped {\n        id\n        name\n        reason\n      }\n    }\n  }\n": typeof types.BulkSuspendCustomersDocument,
     "\n  mutation DeleteCustomers($ids: [ID!]!) {\n    deleteCustomers(ids: $ids) {\n      succeeded\n      skipped {\n        id\n        name\n        reason\n      }\n    }\n  }\n": typeof types.DeleteCustomersDocument,
     "\n  mutation ApproveCustomer($id: ID!) {\n    approveCustomer(id: $id) {\n      id\n      user {\n        id\n        approvedAt\n      }\n    }\n  }\n": typeof types.ApproveCustomerDocument,
+    "\n  mutation UpdateCustomerEmail($data: UpdateCustomerEmailInput!) {\n    updateCustomerEmail(data: $data) {\n      id\n      user {\n        id\n        email\n        isEmailVerified\n      }\n    }\n  }\n": typeof types.UpdateCustomerEmailDocument,
     "\n  mutation RegenerateCustomerKycLink($id: ID!) {\n    regenerateCustomerKycLink(id: $id) {\n      id\n      kycLink\n      kycStatus\n      tosStatus\n      onboardingStep\n    }\n  }\n": typeof types.RegenerateCustomerKycLinkDocument,
     "\n  mutation DeactivateVirtualAccount($id: ID!) {\n    deactivateVirtualAccount(id: $id) {\n      id\n      status\n      deactivatedAt\n    }\n  }\n": typeof types.DeactivateVirtualAccountDocument,
     "\n  mutation ResetCustomerTwoFactor($customerId: ID!) {\n    resetCustomerTwoFactor(customerId: $customerId) {\n      id\n      totpEnabled\n    }\n  }\n": typeof types.ResetCustomerTwoFactorDocument,
@@ -86,6 +87,7 @@ const documents: Documents = {
     "\n  mutation BulkSuspendCustomers($data: BulkSuspendCustomersInput!) {\n    bulkSuspendCustomers(data: $data) {\n      succeeded\n      skipped {\n        id\n        name\n        reason\n      }\n    }\n  }\n": types.BulkSuspendCustomersDocument,
     "\n  mutation DeleteCustomers($ids: [ID!]!) {\n    deleteCustomers(ids: $ids) {\n      succeeded\n      skipped {\n        id\n        name\n        reason\n      }\n    }\n  }\n": types.DeleteCustomersDocument,
     "\n  mutation ApproveCustomer($id: ID!) {\n    approveCustomer(id: $id) {\n      id\n      user {\n        id\n        approvedAt\n      }\n    }\n  }\n": types.ApproveCustomerDocument,
+    "\n  mutation UpdateCustomerEmail($data: UpdateCustomerEmailInput!) {\n    updateCustomerEmail(data: $data) {\n      id\n      user {\n        id\n        email\n        isEmailVerified\n      }\n    }\n  }\n": types.UpdateCustomerEmailDocument,
     "\n  mutation RegenerateCustomerKycLink($id: ID!) {\n    regenerateCustomerKycLink(id: $id) {\n      id\n      kycLink\n      kycStatus\n      tosStatus\n      onboardingStep\n    }\n  }\n": types.RegenerateCustomerKycLinkDocument,
     "\n  mutation DeactivateVirtualAccount($id: ID!) {\n    deactivateVirtualAccount(id: $id) {\n      id\n      status\n      deactivatedAt\n    }\n  }\n": types.DeactivateVirtualAccountDocument,
     "\n  mutation ResetCustomerTwoFactor($customerId: ID!) {\n    resetCustomerTwoFactor(customerId: $customerId) {\n      id\n      totpEnabled\n    }\n  }\n": types.ResetCustomerTwoFactorDocument,
@@ -204,6 +206,10 @@ export function gql(source: "\n  mutation DeleteCustomers($ids: [ID!]!) {\n    d
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation ApproveCustomer($id: ID!) {\n    approveCustomer(id: $id) {\n      id\n      user {\n        id\n        approvedAt\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation ApproveCustomer($id: ID!) {\n    approveCustomer(id: $id) {\n      id\n      user {\n        id\n        approvedAt\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateCustomerEmail($data: UpdateCustomerEmailInput!) {\n    updateCustomerEmail(data: $data) {\n      id\n      user {\n        id\n        email\n        isEmailVerified\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateCustomerEmail($data: UpdateCustomerEmailInput!) {\n    updateCustomerEmail(data: $data) {\n      id\n      user {\n        id\n        email\n        isEmailVerified\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
