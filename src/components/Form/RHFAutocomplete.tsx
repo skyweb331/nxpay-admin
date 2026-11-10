@@ -2,7 +2,7 @@ import { FieldErrorTooltip } from "./FieldErrorTooltip";
 import { useRegisterLabel } from "./FieldShell";
 import { Controller, useFormContext } from "react-hook-form";
 
-import { Autocomplete, FormControl, FormLabel, TextField } from "@mui/material";
+import { Autocomplete, FormControl, FormLabel, TextField, useTheme } from "@mui/material";
 
 import NiChevronDownSmall from "@/icons/nexture/ni-chevron-down-small";
 import NiCross from "@/icons/nexture/ni-cross";
@@ -22,6 +22,7 @@ type Props = {
 /** Single-value autocomplete storing `option.value` (country, region, chain pickers). */
 export function RHFAutocomplete({ name, label, options, placeholder, disabled, disableClearable, className }: Props) {
   const { control } = useFormContext();
+  const theme = useTheme();
   useRegisterLabel(name, label);
 
   return (
@@ -50,7 +51,8 @@ export function RHFAutocomplete({ name, label, options, placeholder, disabled, d
             getOptionLabel={(o) => o.label}
             popupIcon={<NiChevronDownSmall />}
             clearIcon={<NiCross />}
-            slotProps={{ popper: { className: "outlined" } }}
+            // Inline so it beats the global `.MuiPopper-root { z-index: 100 }` inside dialogs
+            slotProps={{ popper: { className: "outlined", style: { zIndex: theme.zIndex.modal + 1 } } }}
             renderInput={(params) => (
               <TextField
                 {...params}
