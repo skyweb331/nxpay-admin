@@ -1,5 +1,6 @@
 import { customerColumns } from "../columns";
 import { BulkActions } from "./BulkActions";
+import { InviteDialog } from "./InviteDialog";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 
@@ -19,7 +20,13 @@ import { useQuery } from "@apollo/client/react";
 
 const EMPTY_SELECTION: GridRowSelectionModel = { type: "include", ids: new Set() };
 
-export default function CustomerListView() {
+export default function CustomerListView({
+  inviteOpen = false,
+  onInviteClose,
+}: {
+  inviteOpen?: boolean;
+  onInviteClose?: () => void;
+}) {
   const { isAdmin } = useAuthContext();
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get("q") ?? "";
@@ -135,6 +142,7 @@ export default function CustomerListView() {
           />
         </CardContent>
       </Card>
+      {onInviteClose && <InviteDialog open={inviteOpen} onClose={onInviteClose} />}
     </ContentWrapper>
   );
 }

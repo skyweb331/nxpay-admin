@@ -168,6 +168,14 @@ export const UPDATE_CUSTOMER_EMAIL = gql(`
   }
 `);
 
+export const CREATE_CUSTOMER = gql(`
+  mutation CreateCustomer($data: CreateCustomerInput!) {
+    createCustomer(data: $data) {
+      ...CustomerRow
+    }
+  }
+`);
+
 export const REGENERATE_CUSTOMER_KYC_LINK = gql(`
   mutation RegenerateCustomerKycLink($id: ID!) {
     regenerateCustomerKycLink(id: $id) {
