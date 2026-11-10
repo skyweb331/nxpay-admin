@@ -60,6 +60,11 @@ export const CUSTOMER_DETAIL = gql(`
       kycLink
       endorsements
       rejectionReasons
+      verifiedFirstName
+      verifiedLastName
+      verifiedCountry
+      verifiedRegion
+      verifiedAt
       payoutWalletId
       wallets {
         ...CustomerWallet

@@ -32,6 +32,7 @@ import {
   UPDATE_CUSTOMER_EMAIL,
 } from "@/libs/Customer/useApollo";
 import { fDateTime } from "@/utils/format-time";
+import { countryName } from "@/utils/geo";
 import { applyServerErrors, errorMessage } from "@/utils/graphql";
 import { useMutation } from "@apollo/client/react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -227,6 +228,38 @@ function TwoFactorRow({ customer }: { customer: Customer }) {
   );
 }
 
+function VerifiedIdentity({ customer }: { customer: Customer }) {
+  const name = [customer.verifiedFirstName, customer.verifiedLastName].filter(Boolean).join(" ");
+  if (!customer.verifiedAt) {
+    return (
+      <Typography variant="body2" className="text-text-secondary">
+        {customer.kycStatus === "approved"
+          ? "Not synced from Bridge yet. It fills in within the hour."
+          : "Available after Bridge approves identity verification."}
+      </Typography>
+    );
+  }
+  const countryMismatch =
+    !!customer.verifiedCountry && !!customer.country && customer.verifiedCountry !== customer.country;
+  const regionMismatch =
+    !countryMismatch && !!customer.verifiedRegion && !!customer.region && customer.verifiedRegion !== customer.region;
+
+  return (
+    <>
+      <Row label="Legal name">{name || "—"}</Row>
+      <Row label="Country">
+        {customer.verifiedCountry ? `${countryName(customer.verifiedCountry)} (${customer.verifiedCountry})` : "—"}
+        {countryMismatch && <Chip size="small" color="warning" label="differs from invite" className="ms-2" />}
+      </Row>
+      <Row label="State / region">
+        {customer.verifiedRegion ?? "—"}
+        {regionMismatch && <Chip size="small" color="warning" label="differs from invite" className="ms-2" />}
+      </Row>
+      <Row label="Synced">{fDateTime(customer.verifiedAt)}</Row>
+    </>
+  );
+}
+
 export function ProfileTab({ customer }: { customer: Customer }) {
   const reasons = Array.isArray(customer.rejectionReasons) ? customer.rejectionReasons : [];
 
@@ -243,7 +276,9 @@ export function ProfileTab({ customer }: { customer: Customer }) {
             <Row label="Account type">
               {customer.type === "business" ? "Business" : customer.type ? "Individual" : "—"}
             </Row>
-            <Row label="Country">{[customer.region, customer.country].filter(Boolean).join(", ") || "—"}</Row>
+            <Row label="Country (from invite)">
+              {[customer.region, customer.country].filter(Boolean).join(", ") || "—"}
+            </Row>
             <Row label="Status">
               <StatusChip kind="customer" value={customer.status} />
             </Row>
@@ -270,6 +305,10 @@ export function ProfileTab({ customer }: { customer: Customer }) {
             <Row label="Onboarding step">
               {ONBOARDING_STEP_LABELS[customer.onboardingStep] ?? customer.onboardingStep}
             </Row>
+            <Typography variant="subtitle2" className="mt-3 mb-1">
+              Verified identity
+            </Typography>
+            <VerifiedIdentity customer={customer} />
             <Typography variant="subtitle2" className="mt-3 mb-2">
               Endorsements
             </Typography>
