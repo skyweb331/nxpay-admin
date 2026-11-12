@@ -164,6 +164,7 @@ function EmailRow({ customer }: { customer: Customer }) {
             <Alert severity="warning">
               The new address is used for sign-in right away and marked unverified. We email a verification code there
               and notify the previous address.
+              {customer.bridgeCustomerId && " Bridge is updated first; if Bridge refuses, nothing changes."}
             </Alert>
             <RHFTextField name="email" label="New email" type="email" autoFocus autoComplete="off" />
             <FormErrorSummary />
