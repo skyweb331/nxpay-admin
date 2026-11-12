@@ -1,7 +1,21 @@
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 
-import { Alert, Box, Button, Card, CardContent, Grid, Typography } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Divider,
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 
 import type { CustomerDetailQuery, FiatCurrency } from "@/__generated__/graphql";
 import { useAuthContext } from "@/auth";
@@ -12,14 +26,60 @@ import StatusChip from "@/components/StatusChip";
 import NiBuilding from "@/icons/nexture/ni-building";
 import { CUSTOMER_DETAIL, DEACTIVATE_VIRTUAL_ACCOUNT, OPEN_MISSING_DEPOSIT_ACCOUNTS } from "@/libs/Customer/useApollo";
 import { chainLabel } from "@/utils/explorer";
-import { fDate } from "@/utils/format-time";
+import { fDate, fDateTime } from "@/utils/format-time";
 import { errorMessage } from "@/utils/graphql";
+import { formatMoney } from "@/utils/money";
 import { useMutation } from "@apollo/client/react";
 
 type Customer = NonNullable<CustomerDetailQuery["customer"]>;
 type VirtualAccount = Customer["virtualAccounts"][number];
 
 const CURRENCIES: FiatCurrency[] = ["usd", "eur"];
+
+/** Bank-verification deposits. Recorded only; never converted, charged or counted toward volume. */
+function Microdeposits({ items }: { items: VirtualAccount["microdeposits"] }) {
+  return (
+    <Box className="mt-3">
+      <Divider />
+      <Typography variant="subtitle2" className="mt-3 mb-1">
+        Microdeposits
+      </Typography>
+      {items.length === 0 ? (
+        <Typography variant="body2" className="text-text-secondary">
+          None received.
+        </Typography>
+      ) : (
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Received</TableCell>
+              <TableCell>Sender</TableCell>
+              <TableCell>Rail</TableCell>
+              <TableCell align="right">Amount</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {items.map((m) => (
+              <TableRow key={m.id}>
+                <TableCell>{fDateTime(m.occurredAt)}</TableCell>
+                <TableCell>
+                  {m.senderName ?? "—"}
+                  {m.description && (
+                    <Typography variant="caption" component="div" className="text-text-secondary">
+                      {m.description}
+                    </Typography>
+                  )}
+                </TableCell>
+                <TableCell>{m.paymentRail?.replace(/_/g, " ").toUpperCase() ?? "—"}</TableCell>
+                <TableCell align="right">{formatMoney(m.amountInCents, m.currency)}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
+    </Box>
+  );
+}
 
 function MissingAccounts({ customer }: { customer: Customer }) {
   const { enqueueSnackbar } = useSnackbar();
@@ -133,6 +193,7 @@ export function AccountsTab({ customer }: { customer: Customer }) {
                       <CopyField label="Routing number" value={di.routingNumber} />
                     </>
                   )}
+                  <Microdeposits items={va.microdeposits} />
                   {isAdmin && active && (
                     <Button
                       color="error"

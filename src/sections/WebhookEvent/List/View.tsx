@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   CardContent,
+  Chip,
   Dialog,
   DialogActions,
   DialogContent,
@@ -100,6 +101,18 @@ export default function WebhookEventListView() {
         minWidth: 220,
         flex: 1,
         renderCell: ({ row }) => <span className="font-mono text-sm">{row.type}</span>,
+      },
+      {
+        field: "activityType",
+        headerName: "Activity",
+        description: "Virtual account activity type (e.g. microdeposit, funds_received), else the object status",
+        minWidth: 170,
+        renderCell: ({ row }) =>
+          row.activityType === "microdeposit" ? (
+            <Chip size="small" color="info" variant="outlined" label="microdeposit" />
+          ) : (
+            <span className="font-mono text-sm">{row.activityType ?? "—"}</span>
+          ),
       },
       {
         field: "objectId",

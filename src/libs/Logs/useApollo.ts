@@ -37,6 +37,7 @@ export const WEBHOOK_EVENT_ROW = gql(`
     bridgeEventId
     category
     type
+    activityType
     objectId
     status
     attempts

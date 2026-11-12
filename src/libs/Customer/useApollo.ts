@@ -86,6 +86,15 @@ export const CUSTOMER_DETAIL = gql(`
           bic
           bankName
         }
+        microdeposits {
+          id
+          amountInCents
+          currency
+          paymentRail
+          senderName
+          description
+          occurredAt
+        }
       }
     }
   }
