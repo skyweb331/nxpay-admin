@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   CardContent,
+  Chip,
   Divider,
   Grid,
   Table,
@@ -55,6 +56,7 @@ function Microdeposits({ items }: { items: VirtualAccount["microdeposits"] }) {
               <TableCell>Received</TableCell>
               <TableCell>Sender</TableCell>
               <TableCell>Rail</TableCell>
+              <TableCell>Status</TableCell>
               <TableCell align="right">Amount</TableCell>
             </TableRow>
           </TableHead>
@@ -71,6 +73,21 @@ function Microdeposits({ items }: { items: VirtualAccount["microdeposits"] }) {
                   )}
                 </TableCell>
                 <TableCell>{m.paymentRail?.replace(/_/g, " ").toUpperCase() ?? "—"}</TableCell>
+                <TableCell>
+                  {m.status === "funds_scheduled" ? (
+                    <Chip
+                      size="small"
+                      color="warning"
+                      label={m.estimatedArrivalDate ? `Arriving ${fDate(m.estimatedArrivalDate)}` : "Scheduled"}
+                    />
+                  ) : (
+                    <Chip
+                      size="small"
+                      color={m.status === "in_review" ? "info" : "success"}
+                      label={m.status === "in_review" ? "In review" : "Received"}
+                    />
+                  )}
+                </TableCell>
                 <TableCell align="right">{formatMoney(m.amountInCents, m.currency)}</TableCell>
               </TableRow>
             ))}

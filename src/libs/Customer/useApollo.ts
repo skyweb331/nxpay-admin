@@ -93,6 +93,8 @@ export const CUSTOMER_DETAIL = gql(`
           paymentRail
           senderName
           description
+          status
+          estimatedArrivalDate
           occurredAt
         }
       }
