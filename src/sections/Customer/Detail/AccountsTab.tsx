@@ -199,6 +199,7 @@ export function AccountsTab({ customer }: { customer: Customer }) {
                   </Typography>
                   <CopyField label="Bridge virtual account ID" value={va.bridgeVirtualAccountId} />
                   <CopyField label="Bank" value={di.bankName} mono={false} />
+                  {di.bankAddress && <CopyField label="Bank address" value={di.bankAddress} mono={false} />}
                   {di.iban ? (
                     <>
                       <CopyField label="IBAN" value={di.iban} />
@@ -209,6 +210,14 @@ export function AccountsTab({ customer }: { customer: Customer }) {
                       <CopyField label="Account number" value={di.accountNumber} />
                       <CopyField label="Routing number" value={di.routingNumber} />
                     </>
+                  )}
+                  <CopyField
+                    label={di.iban ? "Account holder" : "Beneficiary"}
+                    value={di.accountHolderName ?? di.beneficiaryName}
+                    mono={false}
+                  />
+                  {di.beneficiaryAddress && (
+                    <CopyField label="Beneficiary address" value={di.beneficiaryAddress} mono={false} />
                   )}
                   <Microdeposits items={va.microdeposits} />
                   {isAdmin && active && (

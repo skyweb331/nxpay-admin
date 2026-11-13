@@ -85,6 +85,10 @@ export const CUSTOMER_DETAIL = gql(`
           iban
           bic
           bankName
+          bankAddress
+          accountHolderName
+          beneficiaryName
+          beneficiaryAddress
         }
         microdeposits {
           id
